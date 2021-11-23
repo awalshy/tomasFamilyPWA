@@ -1,0 +1,14 @@
+{
+  "presets": ["next/babel"],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "types/": "./types",
+        "components/": "./components",
+        "redux/": "./redux",
+        "config/": "./config",
+        "firebase/api": "./firebase/api"
+    }}]
+  ]
+}
