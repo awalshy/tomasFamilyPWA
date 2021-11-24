@@ -11,5 +11,8 @@ export {
 export {
   selectModal,
   selectUserId,
-  selectUserLoggedIn
+  selectUser,
+  selectUserFamilyId,
+  selectUserLoggedIn,
+  selectAppLoading,
 } from './slices/App'

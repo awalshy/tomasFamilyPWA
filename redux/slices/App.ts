@@ -14,7 +14,7 @@ const initialState: IAppState = {
   error: ''
 }
 
-export const loginUser = createAsyncThunk(
+export const signInUser = createAsyncThunk(
   'app/loginUser',
   async ({ email, password }: { email: string, password: string }) => {
     const fireUser = await firebase.auth().signInWithEmailAndPassword(email, password)
@@ -25,8 +25,7 @@ export const loginUser = createAsyncThunk(
     const user = await firebase.firestore().collection(collecs.users).doc(fireUser.user.uid).get()
     const data = user.data()
     if (!data) {
-      console.error('No Data')
-      return
+      throw Error('No User Data')
     }
     const familyRef: firebase.firestore.DocumentReference = data.family
     const u = {
@@ -121,15 +120,15 @@ const appSlice = createSlice({
     }
   },
   extraReducers: builder => {
-    builder.addCase(loginUser.pending, (state, _action) => {
+    builder.addCase(signInUser.pending, (state, _action) => {
       state.loading = true
     })
-    builder.addCase(loginUser.fulfilled, (state, action) => {
+    builder.addCase(signInUser.fulfilled, (state, action) => {
       state.loading = false
       state.loggedIn = true
       state.user = action.payload
     })
-    builder.addCase(loginUser.rejected, (state, action) => {
+    builder.addCase(signInUser.rejected, (state, action) => {
       state.error = action.error.message || 'Error'
       state.loading = false
     })
@@ -157,7 +156,10 @@ export const {
 } = appSlice.actions
 
 export const selectUserId = (state: RootState) => state.app.user?.id
+export const selectUser = (state: RootState) => state.app.user
+export const selectUserFamilyId = (state: RootState) => state.app.user?.familyId
 export const selectUserLoggedIn = (state: RootState) => state.app.loggedIn
 export const selectModal = (state: RootState) => state.app.modal
+export const selectAppLoading = (state: RootState) => state.app.loading
 
 export default appSlice.reducer

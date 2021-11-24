@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import clsx from 'clsx'
+import Image from 'next/image'
 import {
   AppBar,
   Toolbar,
@@ -8,52 +8,38 @@ import {
   Menu,
   MenuItem,
   Button,
-  Drawer,
-  useTheme,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Theme,
   CssBaseline,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material'
 import { makeStyles, createStyles } from '@mui/styles'
 import {
-  Menu as MenuIcon,
   AccountCircle,
-  ChevronLeft,
-  ChevronRight,
-  Dashboard,
 } from '@mui/icons-material'
 import { useRouter } from 'next/router'
-import { connect } from 'react-redux'
 import firebase from 'firebase'
 import Link from 'next/link'
 
-import { TUser } from 'types/User'
-import { RootState } from 'redux/store'
-import { useAppDispatch } from 'redux/hooks'
+import { selectUser, selectUserLoggedIn } from 'redux/selectors'
+import { useAppDispatch, useAppSelector } from 'redux/hooks'
 import { signOutUser } from 'redux/slices/App'
 
-const drawerWidth = 240
-
 const Nav = ({
-  user,
   children,
-  subtitle,
 }: {
-  user: TUser | undefined
   children: JSX.Element | JSX.Element[]
-  subtitle?: string
 }) => {
   const router = useRouter()
+  const theme = useTheme()
   const classes: any = useStyle()
   const dispatch = useAppDispatch()
-  const theme = useTheme()
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const user = useAppSelector(selectUser)
+  const loggedIn = useAppSelector(selectUserLoggedIn)
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [drawerOpen, displayDrawer] = useState(false)
   const open = Boolean(anchorEl)
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) =>
@@ -71,8 +57,6 @@ const Nav = ({
     // )
     router.push('/SignIn')
   }
-  const handleDrawerOpen = () => displayDrawer(true)
-  const handleDrawerClose = () => displayDrawer(false)
 
   return (
     <div className={classes.root}>
@@ -80,31 +64,30 @@ const Nav = ({
       <AppBar
         position="fixed"
         color="primary"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: drawerOpen,
-        })}
+        className={classes.appBar}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, drawerOpen && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div className={classes.title}>
+          <div style={isMobile ? { flexGrow: 1 } : {}} className={classes.title}>
             <Link href="/">
-              <Typography variant="h5" noWrap>
-                TOMAS Family App
-              </Typography>
+              <Image
+                height="40"
+                width="200"
+                src="/LogoColorLight.svg"
+              />
             </Link>
-            {subtitle && <Typography variant="h6" className={classes.subtitle}>
-              {subtitle}
-            </Typography>}
           </div>
-          {firebase.auth().currentUser && (
+          {!isMobile && loggedIn && <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+            <Link href="/Messages">
+                <Typography variant="h6">Messages</Typography>
+              </Link>
+              <Link href="/Contacts">
+                <Typography variant="h6">Contacts</Typography>
+              </Link>
+              <Link href="/Gallery">
+                <Typography variant="h6">Gallerie</Typography>
+              </Link>
+          </div>}
+          {loggedIn && (
             <div>
               <div className={classes.container}>
                 <Typography className={classes.user}>
@@ -142,7 +125,7 @@ const Nav = ({
               </Menu>
             </div>
           )}
-          {!firebase.auth().currentUser && (
+          {!loggedIn && (
             <div>
               <Button
                 variant="outlined"
@@ -155,38 +138,8 @@ const Nav = ({
           )}
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="persistent"
-        className={classes.drawer}
-        open={drawerOpen}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRight /> : <ChevronLeft />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListItem button onClick={() => router.push('/')}>
-            <ListItemIcon>
-              <Dashboard />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-        </List>
-      </Drawer>
-      <div
-        className={clsx(classes.content, {
-          [classes.contentShift]: drawerOpen,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        <div className={classes.rootChildren}>
-          {children}
-        </div>
+      <div className={classes.rootChildren}>
+        {children}
       </div>
     </div>
   )
@@ -198,24 +151,18 @@ const useStyle = makeStyles((theme: Theme) =>
       display: 'flex',
     },
     rootChildren: {
-      height: '86vh',
-      paddingTop: '3vh',
+      height: '96vh',
+      marginTop: '4vh',
+      paddingTop: '6vh',
       paddingLeft: '2vw',
       paddingRight: '2vw',
-      width: '90vw'
+      width: '100vw',
+      backgroundColor: '#e6e6e6'
     },
     appBar: {
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
       }),
     },
     menuButton: {
@@ -224,29 +171,12 @@ const useStyle = makeStyles((theme: Theme) =>
     hide: {
       display: 'none',
     },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-    drawerPaper: {
-      width: drawerWidth,
-    },
     drawerHeader: {
       display: 'flex',
       alignItems: 'center',
       padding: theme.spacing(0, 1),
       ...theme.mixins.toolbar,
       justifyContent: 'flex-end',
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      marginLeft: -drawerWidth,
-      backgroundColor: '#e6e6e6',
     },
     contentShift: {
       transition: theme.transitions.create('margin', {
@@ -259,7 +189,6 @@ const useStyle = makeStyles((theme: Theme) =>
       marginLeft: 15
     },
     title: {
-      flexGrow: 1,
       flexDirection: 'row',
       display: 'flex',
       justifyContent: 'space-arround',
@@ -279,9 +208,4 @@ const useStyle = makeStyles((theme: Theme) =>
   })
 )
 
-const mapStateToProps = (state: RootState) => ({
-  user: state.app.user,
-  loggedIn: state.app.loggedIn,
-})
-
-export default connect(mapStateToProps)(Nav)
+export default Nav

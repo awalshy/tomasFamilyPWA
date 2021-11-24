@@ -2,23 +2,28 @@ import React from 'react'
 import Head from 'next/head'
 
 import Nav from './Nav'
+import BottomNav from './BottomNav'
+import { useMediaQuery, useTheme } from '@mui/material'
 
 export type TLayoutProps = {
   children: JSX.Element[] | JSX.Element
   title: string
-  subtitle?: string
 }
 
-const PageLayout = ({ children, title, subtitle }: TLayoutProps) => {
+const PageLayout = ({ children, title }: TLayoutProps) => {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   return (
     <div>
       <Head>
-        <title>{title + ' - Peuple'}</title>
+        <title>{title + ' | TOMAS'}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <main style={{ overflowX: 'hidden' }}>
-        <Nav subtitle={subtitle}>{children}</Nav>
+        <Nav>{children}</Nav>
+        {isMobile && <BottomNav />}
       </main>
     </div>
   )
