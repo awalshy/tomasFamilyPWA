@@ -7,8 +7,7 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
-  ListItemButton,
-} from '@mui/material'
+} from '@material-ui/core'
 import Header from 'components/structure/Header'
 import PageLayout from 'components/structure/PageLayout'
 import { useRouter } from 'next/router'
@@ -31,7 +30,7 @@ const Messages = () => {
     if (!loggedIn) router.replace('SignIn')
     if (convs.length <= 0 && userId)
       dispatch(loadConversation(userId))
-  }, [loggedIn])
+  }, [loggedIn, dispatch, router, convs.length, userId])
 
   return (
     <PageLayout title="Conversations">
@@ -43,12 +42,10 @@ const Messages = () => {
             <ListItem
               key={conv.id}
             >
-              <ListItemButton>
-                <ListItemAvatar>
-                  <Avatar>{conv.name.slice(0, 2)}</Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={conv.name} secondary={'Last Message'} />
-              </ListItemButton>
+              <ListItemAvatar>
+                <Avatar>{conv.name.slice(0, 2)}</Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={conv.name} secondary={'Last Message'} />
             </ListItem>
           ))}
         </List>
