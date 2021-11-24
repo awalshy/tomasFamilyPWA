@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import { Theme } from '@mui/material'
-import { makeStyles, createStyles } from '@mui/styles'
+import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 interface IHeader {
   imageSrc: string,
@@ -18,6 +17,7 @@ function Header({ imageSrc, title }: IHeader) {
           src={imageSrc}
           width="100%"
           height="100%"
+          alt=""
         />
       </div>
       <div className={styles.titleContainer}>

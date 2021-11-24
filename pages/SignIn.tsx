@@ -10,8 +10,9 @@ import {
   Typography,
   TextField,
   Theme,
-} from '@mui/material'
-import { makeStyles, createStyles } from '@mui/styles'
+  makeStyles,
+  createStyles
+} from '@material-ui/core'
 
 import PageLayout from 'components/structure/PageLayout'
 import { selectAppLoading, selectUserLoggedIn, signInUser,  } from 'redux/slices/App'
@@ -30,8 +31,7 @@ const SignIn = (): JSX.Element => {
 
   useEffect(() => {
     if (loggedIn) router.push('/')
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-  }, [loggedIn, dispatch])
+  }, [loggedIn, dispatch, router])
 
   const signin = () => {
     dispatch(signInUser({
@@ -46,6 +46,7 @@ const SignIn = (): JSX.Element => {
             <div className={styles.image}>
               <Image
                 src="/logo_head.svg"
+                alt="TOMAS Logo"
                 width="150vh"
                 height="150vh"
               />

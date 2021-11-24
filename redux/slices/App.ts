@@ -11,7 +11,7 @@ const initialState: IAppState = {
   loggedIn: false,
   modal: null,
   loading: false,
-  error: ''
+  error: '',
 }
 
 export const signInUser = createAsyncThunk(

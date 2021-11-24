@@ -12,11 +12,12 @@ import {
   CssBaseline,
   useTheme,
   useMediaQuery,
-} from '@mui/material'
-import { makeStyles, createStyles } from '@mui/styles'
+  makeStyles,
+  createStyles
+} from '@material-ui/core'
 import {
   AccountCircle,
-} from '@mui/icons-material'
+} from '@material-ui/icons'
 import { useRouter } from 'next/router'
 import firebase from 'firebase'
 import Link from 'next/link'
@@ -68,22 +69,23 @@ const Nav = ({
       >
         <Toolbar>
           <div style={isMobile ? { flexGrow: 1 } : {}} className={classes.title}>
-            <Link href="/">
+            <Link href="/" passHref>
               <Image
                 height="40"
                 width="200"
+                alt="TOMAS Logo"
                 src="/LogoColorLight.svg"
               />
             </Link>
           </div>
           {!isMobile && loggedIn && <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-            <Link href="/Messages">
+            <Link href="/Messages" passHref>
                 <Typography variant="h6">Messages</Typography>
               </Link>
-              <Link href="/Contacts">
+              <Link href="/Contacts" passHref>
                 <Typography variant="h6">Contacts</Typography>
               </Link>
-              <Link href="/Gallery">
+              <Link href="/Gallery" passHref>
                 <Typography variant="h6">Gallerie</Typography>
               </Link>
           </div>}

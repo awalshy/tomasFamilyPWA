@@ -3,11 +3,11 @@ import Head from 'next/head'
 
 import Nav from './Nav'
 import BottomNav from './BottomNav'
-import { useMediaQuery, useTheme } from '@mui/material'
+import { useMediaQuery, useTheme } from '@material-ui/core'
 
 export type TLayoutProps = {
   children: JSX.Element[] | JSX.Element
-  title: string
+  title: string,
 }
 
 const PageLayout = ({ children, title }: TLayoutProps) => {
