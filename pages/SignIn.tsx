@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import firebase from 'firebase'
 import { useRouter } from 'next/router'
 import {
   Card,

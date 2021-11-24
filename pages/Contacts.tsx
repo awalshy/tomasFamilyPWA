@@ -42,7 +42,9 @@ const Contact = () => {
       <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {} }>
         <List>
           {familyMembers.map(member => (
-            <ListItem key={member.id} >
+            <ListItem
+              key={member.id}
+            >
               <ListItemAvatar>
                 <Avatar>{member.firstName[0] + member.lastName[0]}</Avatar>
               </ListItemAvatar>
@@ -50,7 +52,9 @@ const Contact = () => {
                 {member.firstName + ' ' + member.lastName}
               </ListItemText>
               <ListItemSecondaryAction>
-                <IconButton>
+                <IconButton
+                  onClick={() => router.push('/Call')}
+                >
                   <PhoneEnabled />
                 </IconButton>
               </ListItemSecondaryAction>
