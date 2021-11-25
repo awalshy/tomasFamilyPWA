@@ -1,15 +1,18 @@
 import PageLayout from '../components/structure/PageLayout'
 import { useState } from 'react'
-import { useAppSelector } from 'src/redux/hooks'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { selectUserFamilyId } from 'src/redux/selectors'
 import { useEffect } from 'react'
 import API from 'src/firebase/api'
 import { Fab, ImageList, ImageListItem, useMediaQuery, useTheme } from '@material-ui/core'
 import { Add } from '@material-ui/icons'
 import { Skeleton } from '@material-ui/lab'
+import { openModal } from 'src/redux/slices/App'
+import { MODALS } from 'src/types/App'
 
 const Gallery = () => {
   const theme = useTheme()
+  const dispatch = useAppDispatch()
 
   const [urls, setUrls] = useState<string[]>([])
   // const [loading, setLoading] = useState(false)
@@ -49,7 +52,15 @@ const Gallery = () => {
             <Skeleton variant="rect" width="20vh" height="20vh" />
           </ImageListItem>
           </ImageList>}
-        <Fab color="primary" variant={isMobile ? "circular" : "extended"} style={{ position: 'absolute', bottom: '10vh', right: '5vw' }}>
+        <Fab
+          color="primary"
+          variant={isMobile ? "circular" : "extended"}
+          style={{ position: 'absolute', bottom: '10vh', right: '5vw' }}
+          onClick={() => dispatch(openModal({
+            name: MODALS.UPLOAD_PICTURE,
+            params: {}
+          }))}
+        >
           <Add />
           {!isMobile && 'Upload'}
         </Fab>
