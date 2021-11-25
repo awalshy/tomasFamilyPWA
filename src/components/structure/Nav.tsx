@@ -70,7 +70,7 @@ const Nav = ({
         className={classes.appBar}
       >
         <Toolbar>
-          <div style={isMobile ? { flexGrow: 1 } : {}} className={classes.title}>
+          <div style={isMobile || !loggedIn ? { flexGrow: 1 } : {}} className={classes.title}>
             <Link to="/">
               <img
                 height="40"

@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { selectAllMembers, selectUserFamilyId, selectUserLoggedIn } from '../redux/selectors'
 import { PhoneEnabled } from '@material-ui/icons'
 import { loadFamily } from '../redux/slices/Family'
+import ListSkeleton from 'src/components/structure/ListSkeleton'
 
 const Contact = () => {
   const navigate = useNavigate()
@@ -40,7 +41,7 @@ const Contact = () => {
       <Divider />
       <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {} }>
         <List>
-          {familyMembers.map(member => (
+          {familyMembers.map((member) => (
             <ListItem key={member.id} >
               <ListItemAvatar>
                 <Avatar>{member.firstName[0] + member.lastName[0]}</Avatar>
@@ -58,6 +59,9 @@ const Contact = () => {
             </ListItem>
           ))}
         </List>
+        {familyMembers.length === 0 && ['0', '1', '2'].map(key => (
+          <ListSkeleton key={key} />
+        ))}
       </div>
     </React.Fragment>
   )
