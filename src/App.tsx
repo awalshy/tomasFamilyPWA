@@ -10,6 +10,7 @@ import Home from './routes/Home';
 import SignIn from './routes/SignIn';
 import Error404 from './routes/404';
 import Call from './routes/Call';
+import Profile from './routes/Profile';
 import { useEffect } from 'react';
 import { loadUser } from './redux/slices/App';
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/Call" element={<Call />} />
             <Route path="*" element={<Error404 />} />
+            <Route path="/Profile" element={<Profile />} />
           </Routes>
         </BrowserRouter>
         <ModalController />

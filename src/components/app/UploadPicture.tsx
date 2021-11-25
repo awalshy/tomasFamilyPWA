@@ -137,7 +137,7 @@ const UploadPicture = () => {
         <Button
           variant="contained"
           disabled={uploading}
-          color="secondary"
+          color="primary"
           onClick={handleUpload}
         >
           Upload
