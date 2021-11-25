@@ -135,6 +135,7 @@ const appSlice = createSlice({
     builder.addCase(loadUser.fulfilled, (state, action) => {
       state.user = action.payload
       state.loading = false
+      state.loggedIn = true
     })
     builder.addCase(signOutUser.pending, (state, _action) => {
       state.error = ''

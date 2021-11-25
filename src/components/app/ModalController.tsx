@@ -5,9 +5,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { MODALS } from 'src/types/App'
 
 // Modals
+import UploadPictureModal from '../../modal/UploadPictureModal'
 
-const getModal = (_modal: MODALS, _ownerId: string, _params: any): JSX.Element => {
-  // if (modal == MODALS.ADD_ADDR) return <AddAddr />
+const getModal = (modal: MODALS, _ownerId: string, _params: any): JSX.Element => {
+  if (modal === MODALS.UPLOAD_PICTURE) return <UploadPictureModal />
   // if (modal == MODALS.DISP_ADDR) return <DisplayAddr person={params.person as TPerson} addr={params.addr as TAddr} />
   return <div></div>
 }

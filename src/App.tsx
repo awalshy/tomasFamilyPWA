@@ -10,6 +10,8 @@ import Home from './routes/Home';
 import SignIn from './routes/SignIn';
 import Error404 from './routes/404';
 import Call from './routes/Call';
+import { useEffect } from 'react';
+import { loadUser } from './redux/slices/App';
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -22,9 +24,22 @@ const themeOptions: ThemeOptions = {
 function App() {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-    firebase.firestore().enablePersistence()
+    console.warn('Enabling persistence')
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(err => console.error('Auth Persistence Error', err))
+    firebase.firestore().enablePersistence().catch(err => console.error('Firestore Persistence error', err))
   }
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        store.dispatch(loadUser({
+          email: user.email || '',
+          uid: user.uid
+        }))
+      }
+    })
+  }, [])
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={createTheme(themeOptions)}>
