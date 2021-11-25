@@ -1,29 +1,34 @@
-import React from 'react'
-import Head from 'next/head'
+import Helmet from 'react-helmet'
 
 import Nav from './Nav'
 import BottomNav from './BottomNav'
 import { useMediaQuery, useTheme } from '@material-ui/core'
+import { useAppSelector } from 'src/redux/hooks'
+import { selectUserLoggedIn } from 'src/redux/selectors'
 
 export type TLayoutProps = {
   children: JSX.Element[] | JSX.Element
   title: string,
+  value?: number,
+  setValue?: (v: number) => void
 }
 
-const PageLayout = ({ children, title }: TLayoutProps) => {
+const PageLayout = ({ children, title, value, setValue }: TLayoutProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
+  const loggedIn = useAppSelector(selectUserLoggedIn)
+
   return (
     <div>
-      <Head>
+      <Helmet>
         <title>{title + ' | TOMAS'}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
+      </Helmet>
       <main style={{ overflowX: 'hidden' }}>
-        <Nav>{children}</Nav>
-        {isMobile && <BottomNav />}
+        <Nav value={value} setValue={setValue}>{children}</Nav>
+        {isMobile && loggedIn && <BottomNav value={value} setValue={setValue} />}
       </main>
     </div>
   )

@@ -1,5 +1,4 @@
-import PageLayout from 'components/structure/PageLayout'
-import React from 'react'
+import PageLayout from '../components/structure/PageLayout'
 
 const Gallery = () => {
   return (

@@ -8,13 +8,12 @@ import {
   ListItemText,
   ListItemAvatar,
 } from '@material-ui/core'
-import Header from 'components/structure/Header'
-import PageLayout from 'components/structure/PageLayout'
+import Header from '../components/structure/Header'
 import { useNavigate } from 'react-router'
-import { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from 'redux/hooks'
-import { selectAllConvs, selectUserId, selectUserLoggedIn } from 'redux/selectors'
-import { loadConversation } from 'redux/slices/Conversations'
+import React, { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { selectAllConvs, selectUserId, selectUserLoggedIn } from '../redux/selectors'
+import { loadConversation } from '../redux/slices/Conversations'
 
 const Messages = () => {
   const navigate = useNavigate()
@@ -33,14 +32,14 @@ const Messages = () => {
   }, [loggedIn, dispatch, navigate, convs.length, userId])
 
   return (
-    <PageLayout title="Conversations">
+    <React.Fragment>
       <Header title="Conversations" imageSrc={'/convs.svg'} />
       <Divider />
       <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {} }>
         <List>
           {convs.map(conv => (
             <ListItem
-              key={conv.id}
+            key={conv.id}
             >
               <ListItemAvatar>
                 <Avatar>{conv.name.slice(0, 2)}</Avatar>
@@ -50,7 +49,7 @@ const Messages = () => {
           ))}
         </List>
       </div>
-    </PageLayout>
+    </React.Fragment>
   )
 }
 

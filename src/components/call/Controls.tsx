@@ -5,7 +5,7 @@ import {
 } from 'agora-rtc-react'
 import {
   useClient
-} from 'config/agora'
+} from 'src/config/agora'
 
 interface IControlProps {
   tracks: [IMicrophoneAudioTrack, ICameraVideoTrack];

@@ -1,11 +1,10 @@
-import React from 'react';
 import './App.css';
 import { Provider } from 'react-redux'
-import store from 'redux/store'
+import store from './redux/store'
 import { createTheme, ThemeOptions, ThemeProvider } from '@material-ui/core';
-import ModalController from 'components/app/ModalController';
+import ModalController from './components/app/ModalController';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import firebaseConfig from 'config/firebase-config.json'
+import firebaseConfig from './config/firebase-config.json'
 import firebase from 'firebase'
 import Home from './routes/Home';
 import SignIn from './routes/SignIn';

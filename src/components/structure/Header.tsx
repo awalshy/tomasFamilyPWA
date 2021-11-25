@@ -1,5 +1,3 @@
-import React from 'react'
-import Image from 'next/image'
 import { makeStyles, createStyles, Theme } from '@material-ui/core'
 
 interface IHeader {
@@ -13,7 +11,7 @@ function Header({ imageSrc, title }: IHeader) {
   return (
     <div className={styles.headerRoot}>
       <div className={styles.image}>
-        <Image
+        <img
           src={imageSrc}
           width="100%"
           height="100%"
@@ -30,7 +28,7 @@ function Header({ imageSrc, title }: IHeader) {
 const useStyles = makeStyles((_theme: Theme) =>
   createStyles({
     image: {
-      width: '50%',
+      width: '40%',
       height: '80%',
       display: 'flex',
       justifyContent: 'center',
@@ -40,7 +38,7 @@ const useStyles = makeStyles((_theme: Theme) =>
     },
     titleContainer: {
       height: '80%',
-      width: '40%',
+      width: '60%',
       padding: 20,
     },
     headerRoot: {

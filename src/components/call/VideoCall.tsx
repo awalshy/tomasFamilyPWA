@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   IAgoraRTCRemoteUser
 } from 'agora-rtc-react'
-import { useMicrophoneAndCameraTracks, useClient, AgoraConfig } from 'config/agora'
+import { useMicrophoneAndCameraTracks, useClient, AgoraConfig } from 'src/config/agora'
 import Videos from './Videos'
 import Controls from './Controls'
 

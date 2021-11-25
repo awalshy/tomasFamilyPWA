@@ -10,14 +10,13 @@ import {
   useMediaQuery,
   ListItemSecondaryAction
 } from '@material-ui/core'
-import Header from 'components/structure/Header'
-import PageLayout from 'components/structure/PageLayout'
+import Header from '../components/structure/Header'
 import { useNavigate } from 'react-router-dom'
 import React, { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from 'redux/hooks'
-import { selectAllMembers, selectUserFamilyId, selectUserLoggedIn } from 'redux/selectors'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { selectAllMembers, selectUserFamilyId, selectUserLoggedIn } from '../redux/selectors'
 import { PhoneEnabled } from '@material-ui/icons'
-import { loadFamily } from 'redux/slices/Family'
+import { loadFamily } from '../redux/slices/Family'
 
 const Contact = () => {
   const navigate = useNavigate()
@@ -36,7 +35,7 @@ const Contact = () => {
   }, [loggedIn, dispatch, familyMembers.length, navigate, userFamilyId])
 
   return (
-    <PageLayout title="Contacts">
+    <React.Fragment>
       <Header title="Contacts" imageSrc="/calls.svg" />
       <Divider />
       <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {} }>
@@ -50,7 +49,9 @@ const Contact = () => {
                 {member.firstName + ' ' + member.lastName}
               </ListItemText>
               <ListItemSecondaryAction>
-                <IconButton>
+                <IconButton
+                  onClick={() => navigate('/Call')}
+                >
                   <PhoneEnabled />
                 </IconButton>
               </ListItemSecondaryAction>
@@ -58,7 +59,7 @@ const Contact = () => {
           ))}
         </List>
       </div>
-    </PageLayout>
+    </React.Fragment>
   )
 }
 

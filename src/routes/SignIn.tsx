@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import firebase from 'firebase'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Card,
@@ -14,9 +12,9 @@ import {
   createStyles
 } from '@material-ui/core'
 
-import PageLayout from 'components/structure/PageLayout'
-import { selectAppLoading, selectUserLoggedIn, signInUser,  } from 'redux/slices/App'
-import { useAppSelector, useAppDispatch } from 'redux/hooks'
+import PageLayout from '../components/structure/PageLayout'
+import { selectAppLoading, selectUserLoggedIn, signInUser,  } from '../redux/slices/App'
+import { useAppSelector, useAppDispatch } from '../redux/hooks'
 
 const SignIn = (): JSX.Element => {
   const styles: any = useStyles()
@@ -31,7 +29,7 @@ const SignIn = (): JSX.Element => {
 
   useEffect(() => {
     if (loggedIn) navigate('/')
-  }, [loggedIn, dispatch, router])
+  }, [loggedIn, dispatch, navigate])
 
   const signin = () => {
     dispatch(signInUser({
@@ -44,7 +42,7 @@ const SignIn = (): JSX.Element => {
       <div className={styles.center}>
           <Card className={styles.card} raised>
             <div className={styles.image}>
-              <Image
+              <img
                 src="/logo_head.svg"
                 alt="TOMAS Logo"
                 width="150vh"

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Image from 'next/image'
 import {
   AppBar,
   Toolbar,
@@ -20,16 +19,19 @@ import {
 } from '@material-ui/icons'
 import { useNavigate } from 'react-router-dom'
 import firebase from 'firebase'
-import Link from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import { selectUser, selectUserLoggedIn } from 'redux/selectors'
-import { useAppDispatch, useAppSelector } from 'redux/hooks'
-import { signOutUser } from 'redux/slices/App'
+import { selectUser, selectUserLoggedIn } from 'src/redux/selectors'
+import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import { signOutUser } from 'src/redux/slices/App'
 
 const Nav = ({
   children,
+  setValue = (v: number) => console.error('Forgot Set Value', v)
 }: {
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[],
+  value?: number,
+  setValue?: (v: number) => void
 }) => {
   const navigate = useNavigate()
   const theme = useTheme()
@@ -69,8 +71,8 @@ const Nav = ({
       >
         <Toolbar>
           <div style={isMobile ? { flexGrow: 1 } : {}} className={classes.title}>
-            <Link href="/" passHref>
-              <Image
+            <Link to="/">
+              <img
                 height="40"
                 width="200"
                 alt="TOMAS Logo"
@@ -79,15 +81,15 @@ const Nav = ({
             </Link>
           </div>
           {!isMobile && loggedIn && <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-            <Link href="/Messages" passHref>
+              <div onClick={() => setValue(0)}>
                 <Typography variant="h6">Messages</Typography>
-              </Link>
-              <Link href="/Contacts" passHref>
+              </div>
+              <div onClick={() => setValue(1)}>
                 <Typography variant="h6">Contacts</Typography>
-              </Link>
-              <Link href="/Gallery" passHref>
+              </div>
+              <div onClick={() => setValue(2)}>
                 <Typography variant="h6">Gallerie</Typography>
-              </Link>
+              </div>
           </div>}
           {loggedIn && (
             <div>
@@ -120,7 +122,7 @@ const Nav = ({
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={() => router.push('/Profile')}>
+                <MenuItem onClick={() => navigate('/Profile')}>
                   Profile
                 </MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
@@ -132,7 +134,7 @@ const Nav = ({
               <Button
                 variant="outlined"
                 color="inherit"
-                onClick={() => router.replace('/SignIn')}
+                onClick={() => navigate('/SignIn', { replace: true })}
               >
                 Sign In
               </Button>

@@ -1,9 +1,8 @@
 import { Modal, Paper, Theme, makeStyles, createStyles } from '@material-ui/core'
-import { closeModal } from 'redux/slices/App'
-import { selectUserId, selectModal } from 'redux/selectors'
-import React from 'react'
+import { closeModal } from '../../redux/slices/App'
+import { selectUserId, selectModal } from '../../redux/selectors'
 import { useSelector, useDispatch } from 'react-redux'
-import { MODALS } from 'types/App'
+import { MODALS } from 'src/types/App'
 
 // Modals
 

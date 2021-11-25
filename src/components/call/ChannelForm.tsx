@@ -1,5 +1,4 @@
-import React from 'react'
-import { AgoraConfig } from 'config/agora'
+import { AgoraConfig } from '../../config/agora'
 
 const ChannelForm = ({ setInCall, setChannelName }: {
   setInCall: (v: boolean) => void

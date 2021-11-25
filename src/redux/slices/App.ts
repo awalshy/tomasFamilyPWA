@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import firebase from 'firebase'
-import { collecs } from 'firebase/api'
-import { TUser } from 'types/User'
-import { IAppState, TModalState } from 'types/App'
-import { RootState } from 'redux/store'
+import { collecs } from 'src/firebase/api'
+import { TUser } from 'src/types/User'
+import { IAppState, TModalState } from 'src/types/App'
+import { RootState } from 'src/redux/store'
 
 const initialState: IAppState = {
   ready: false,
