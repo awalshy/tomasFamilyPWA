@@ -72,7 +72,8 @@ const SignIn = (): JSX.Element => {
                 </div>
               </CardContent>
               <CardActions className={styles.actions}>
-                <Button onClick={signin}>{appLoading ? 'Connexion...' : 'Se connecter'}</Button>
+                <Button variant="contained" color="primary" onClick={signin}>{appLoading ? 'Connexion...' : 'Se connecter'}</Button>
+                <Button onClick={() => navigate('/Register', { replace: true })}>Créer un compte</Button>
               </CardActions>
           </Card>
       </div>

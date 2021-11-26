@@ -67,6 +67,18 @@ class FamiliesController {
     return familyMembers
   }
 
+  async checkFamily(familyCode: string) {
+    const families = await firebase.firestore().collection(collecs.families).where('code', '==', familyCode).get()
+    if (families.docs.length <= 0)
+      return { exists: false }
+    const family = families.docs[0]
+    return {
+      exists: true,
+      code: family.get('code'),
+      name: family.get('name')
+    }
+  }
+
   async removeMember(member: TUser): Promise<void> {
     const memberRef = firebase.firestore().collection(collecs.users).doc(member.id)
     await memberRef.delete()

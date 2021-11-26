@@ -13,6 +13,7 @@ import Call from './routes/Call';
 import Profile from './routes/Profile';
 import { useEffect } from 'react';
 import { loadUser } from './redux/slices/App';
+import Register from './routes/Register';
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -32,7 +33,7 @@ function App() {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
+      if (user && window.location.pathname !== '/Register') {
         store.dispatch(loadUser({
           email: user.email || '',
           uid: user.uid
@@ -51,6 +52,7 @@ function App() {
             <Route path="/Call" element={<Call />} />
             <Route path="*" element={<Error404 />} />
             <Route path="/Profile" element={<Profile />} />
+            <Route path="/Register" element={<Register />} />
           </Routes>
         </BrowserRouter>
         <ModalController />
