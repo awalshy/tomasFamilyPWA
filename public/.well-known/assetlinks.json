@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "awalsh.tomasfamily.com",
+    "sha256_cert_fingerprints": [
+      "29:FA:94:3C:F0:EF:2E:73:C1:C3:40:82:D8:14:1B:09:9D:3F:CD:FD:70:BD:DF:13:BE:2F:63:78:72:AB:62:A7"
+    ]
+  }
+}]
