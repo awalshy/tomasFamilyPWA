@@ -13,7 +13,7 @@ type IVideoCall = {
 
 function VideoCall({ setInCall, channelName }: IVideoCall) {
   const [users, setUsers] = useState<IAgoraRTCRemoteUser[]>([])
-  const [start, setStart] = useState(false)
+  const [, setStart] = useState(false)
   const client = useClient()
   const { ready, tracks } = useMicrophoneAndCameraTracks()
 
@@ -52,11 +52,11 @@ function VideoCall({ setInCall, channelName }: IVideoCall) {
   }, [channelName, client, ready, tracks])
 
   return (
-    <div>
+    <div style={{ padding: 20 }}>
       {ready && tracks && (
         <Controls tracks={tracks} setStart={setStart} setInCall={setInCall} />
       )}
-      {start && tracks && <Videos users={users} tracks={tracks} />}
+      {tracks && <Videos users={users} tracks={tracks} />}
     </div>
   )
 }
