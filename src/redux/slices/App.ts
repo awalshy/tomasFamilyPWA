@@ -42,34 +42,71 @@ export const signInUser = createAsyncThunk(
 export const signUpUser = createAsyncThunk(
   'app/userSignUp',
   async ({
-    email, password, firstName, lastName, familyCode
-  }: { email: string, password: string, firstName: string, lastName: string, familyCode: string }) => {
+    email, password
+  }: { email: string, password: string }) => {
+    // Register User
+    await firebase.auth()
+      .createUserWithEmailAndPassword(email, password)
+      .catch(err => {
+        console.error(err)
+        throw Error(err)
+      })
+  }
+)
+
+export const signUpUserDetails = createAsyncThunk(
+  'app/userSignUpDetails',
+  async({ firstName, lastName }: { firstName: string, lastName: string }) => {
+    const fireUser = firebase.auth().currentUser
+    if (!fireUser)
+      throw Error('Not logged In')
+    await firebase.firestore().collection(collecs.users).doc(fireUser.uid).set({
+      firstName,
+      lastName
+    })
+  }
+)
+
+export const signUpUserFamily = createAsyncThunk(
+  'app/userSignUpFamily',
+  async({ familyCode }: { familyCode: string }) => {
     // Check family Code
     const docs = await firebase.firestore().collection(collecs.families).where('code', '==', familyCode).get()
     if (docs.docs.length <= 0) {
-      console.log('NO FAMILIES')
-      return
+      throw Error('No family with this code')
     }
     // Get family
-    const familyId = docs.docs[0].id
-    // Register User
-    const fireUser = await firebase.auth().createUserWithEmailAndPassword(email, password)
-    // Save User Info to DB
-    if (!fireUser || !fireUser.user) {
-      console.log('No FireUser')
-      return
-    }
-    await firebase.firestore().collection(collecs.users).doc(fireUser.user.uid).set({
-      firstName,
-      lastName,
-      familyId
+    const family = docs.docs[0]
+    const familyId = family.id
+
+    // Register familyId in user
+    const fireUser = firebase.auth().currentUser
+    if (!fireUser) throw Error('No FireUser')
+    const user = await firebase.firestore().collection(collecs.users).doc(fireUser.uid).get()
+    await user.ref.update({
+      family: family.ref
     })
+
+    // Register in Family
+    const members = family.get('members')
+    family.ref.update({
+      members: [...members, user.ref]
+    })
+
+    // Add to family Conversation
+    const conv = await firebase.firestore().collection(collecs.convs).doc(family.get('convId')).get()
+    const convMembers = conv.get('members')
+    conv.ref.update({
+      members: [...convMembers, user.ref]
+    })
+
+    // return User
     return {
-      id: fireUser.user.uid,
-      email: fireUser.user.email,
-      firstName,
-      lastName,
-      familyId
+      id: user.id,
+      firstName: user.get('firstName'),
+      lastName: user.get('lastName'),
+      familyId,
+      email: fireUser.email
     } as TUser
   }
 )
@@ -120,6 +157,44 @@ const appSlice = createSlice({
     }
   },
   extraReducers: builder => {
+    builder.addCase(signUpUser.pending, (state, _action) => {
+      state.loading = true
+      if (state.error !== '')
+        state.error = ''
+    })
+    builder.addCase(signUpUser.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Error'
+    })
+    builder.addCase(signUpUser.fulfilled, (state, _action) => {
+      state.loading = false
+    })
+    builder.addCase(signUpUserDetails.pending, (state, _action) => {
+      state.loading = true
+      if (state.error !== '')
+        state.error = ''
+    })
+    builder.addCase(signUpUserDetails.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Error'
+    })
+    builder.addCase(signUpUserDetails.fulfilled, (state, _action) => {
+      state.loading = false
+    })
+    builder.addCase(signUpUserFamily.pending, (state, _action) => {
+      state.loading = true
+      if (state.error !== '')
+        state.error = ''
+    })
+    builder.addCase(signUpUserFamily.rejected, (state, action) => {
+      state.loading = false
+      state.error = action.error.message || 'Error'
+    })
+    builder.addCase(signUpUserFamily.fulfilled, (state, action) => {
+      state.loading = false
+      state.loggedIn = true
+      state.user = action.payload
+    })
     builder.addCase(signInUser.pending, (state, _action) => {
       state.loading = true
     })
