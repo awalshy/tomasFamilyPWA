@@ -1,7 +1,8 @@
 import { TUser } from "./User";
 
 export enum MODALS {
-  UPLOAD_PICTURE = 'UPLOAD_PICTURE'
+  UPLOAD_PICTURE = 'UPLOAD_PICTURE',
+  EDIT_FAMILY = 'EDIT_FAMILY'
 }
 
 export type EntityState = {

@@ -5,11 +5,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { MODALS } from 'src/types/App'
 
 // Modals
-import UploadPictureModal from '../../modal/UploadPictureModal'
+import UploadPictureModal from 'src/modal/UploadPictureModal'
+import EditFamily from 'src/modal/EditFamily'
 
 const getModal = (modal: MODALS, _ownerId: string, _params: any): JSX.Element => {
   if (modal === MODALS.UPLOAD_PICTURE) return <UploadPictureModal />
-  // if (modal == MODALS.DISP_ADDR) return <DisplayAddr person={params.person as TPerson} addr={params.addr as TAddr} />
+  if (modal === MODALS.EDIT_FAMILY) return <EditFamily />
   return <div></div>
 }
 

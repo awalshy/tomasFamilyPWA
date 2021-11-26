@@ -26,7 +26,7 @@ function App() {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
     console.warn('Enabling persistence')
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(err => console.error('Auth Persistence Error', err))
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.error('Auth Persistence Error', err))
     firebase.firestore().enablePersistence().catch(err => console.error('Firestore Persistence error', err))
   }
 

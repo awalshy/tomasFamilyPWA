@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router'
 import Header from 'src/components/structure/Header'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { selectAppLoading, selectFamilyNbMembers, selectFamilyCode, selectFamilyName, selectUser, selectUserLoggedIn } from 'src/redux/selectors'
-import { signOutUser } from 'src/redux/slices/App'
+import { openModal, signOutUser } from 'src/redux/slices/App'
 import { loadFamily } from 'src/redux/slices/Family'
+import { MODALS } from 'src/types/App'
 import PageLayout from '../components/structure/PageLayout'
 
 function Profile() {
@@ -62,11 +63,15 @@ function Profile() {
             <Divider style={{ marginTop: '2vh', marginBottom: '2vh' }} />
             <Typography variant="h5">Famille</Typography>
             <Typography>{`Nom ${familyName}`}</Typography>
-            <Typography>{`${familyNbMembers} Membres`}</Typography>
+            <Typography>{`${familyNbMembers} Membre${familyNbMembers > 1 ? 's' : ''}`}</Typography>
             <div style={{ marginTop: '1vh', display: 'flex', width: '100%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
               <Button
                 variant="contained"
                 color="primary"
+                onClick={() => dispatch(openModal({
+                  name: MODALS.EDIT_FAMILY,
+                  params: {}
+                }))}
               >
                 Editer
               </Button>

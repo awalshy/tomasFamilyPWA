@@ -30,7 +30,7 @@ const Gallery = () => {
 
   return (
     <PageLayout title="Gallery | TOMAS">
-      <div>
+      <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {}} >
         {urls.length > 0 && <ImageList cols={3}>
           {urls.map(item => (
             <ImageListItem>

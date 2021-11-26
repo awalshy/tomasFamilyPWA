@@ -4,7 +4,7 @@ import UploadPicture from 'src/components/app/UploadPicture'
 function UploadPictureModal() {
   return (<div style={{ padding: 20 }}>
     <Typography style={{ marginBottom: '3vh' }} variant="h4">
-      Upload Picture
+      Télécharger des images
     </Typography>
     <div>
       <UploadPicture />

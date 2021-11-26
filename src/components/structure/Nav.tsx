@@ -16,10 +16,10 @@ import {
 } from '@material-ui/core'
 import {
   AccountCircle,
+  ArrowBackSharp
 } from '@material-ui/icons'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import firebase from 'firebase'
-import { Link } from 'react-router-dom'
 
 import { selectUser, selectUserLoggedIn } from 'src/redux/selectors'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
@@ -34,6 +34,7 @@ const Nav = ({
   setValue?: (v: number) => void
 }) => {
   const navigate = useNavigate()
+  const location = useLocation()
   const theme = useTheme()
   const classes: any = useStyle()
   const dispatch = useAppDispatch()
@@ -60,6 +61,11 @@ const Nav = ({
     // )
     navigate('/SignIn')
   }
+  const handleNavClick = (id: number) => {
+    setValue(id)
+    if (location.pathname !== '/')
+      navigate('/')
+  }
 
   return (
     <div className={classes.root}>
@@ -71,6 +77,13 @@ const Nav = ({
       >
         <Toolbar>
           <div style={isMobile || !loggedIn ? { flexGrow: 1 } : {}} className={classes.title}>
+            {location.pathname === '/Profile' && (
+              <IconButton
+                onClick={() => navigate(-1)}
+              >
+                <ArrowBackSharp style={{ color: 'white' }} />
+              </IconButton>
+            )}
             <Link to="/">
               <img
                 height="40"
@@ -81,13 +94,13 @@ const Nav = ({
             </Link>
           </div>
           {!isMobile && loggedIn && <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-              <div onClick={() => setValue(0)}>
+              <div onClick={() => handleNavClick(0)}>
                 <Typography variant="h6">Messages</Typography>
               </div>
-              <div onClick={() => setValue(1)}>
+              <div onClick={() => handleNavClick(1)}>
                 <Typography variant="h6">Contacts</Typography>
               </div>
-              <div onClick={() => setValue(2)}>
+              <div onClick={() => handleNavClick(2)}>
                 <Typography variant="h6">Gallerie</Typography>
               </div>
           </div>}
