@@ -10,6 +10,7 @@ import Home from './routes/Home';
 import SignIn from './routes/SignIn';
 import Error404 from './routes/404';
 import Call from './routes/Call';
+import Profile from './routes/Profile';
 import { useEffect } from 'react';
 import { loadUser } from './redux/slices/App';
 
@@ -25,7 +26,7 @@ function App() {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
     console.warn('Enabling persistence')
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).catch(err => console.error('Auth Persistence Error', err))
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.error('Auth Persistence Error', err))
     firebase.firestore().enablePersistence().catch(err => console.error('Firestore Persistence error', err))
   }
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/SignIn" element={<SignIn />} />
             <Route path="/Call" element={<Call />} />
             <Route path="*" element={<Error404 />} />
+            <Route path="/Profile" element={<Profile />} />
           </Routes>
         </BrowserRouter>
         <ModalController />

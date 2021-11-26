@@ -62,3 +62,6 @@ export default familySlice.reducer
 export const {
   selectAll: selectAllMembers
 } = membersEntity.getSelectors((state: RootState) => state.family)
+export const selectFamilyNbMembers = (state: RootState) => selectAllMembers(state).length
+export const selectFamilyCode = (state: RootState) => state.family.family?.code
+export const selectFamilyName = (state: RootState) => state.family.family?.name
