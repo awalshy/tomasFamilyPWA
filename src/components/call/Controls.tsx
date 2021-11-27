@@ -6,6 +6,9 @@ import {
 import {
   useClient
 } from 'src/config/agora'
+import { IconButton } from '@material-ui/core';
+import { useNavigate } from 'react-router'
+import { CallEnd, Mic, MicOff, Videocam, VideocamOff } from '@material-ui/icons';
 
 interface IControlProps {
   tracks: [IMicrophoneAudioTrack, ICameraVideoTrack];
@@ -15,6 +18,7 @@ interface IControlProps {
 
 const Controls = ({ tracks, setStart, setInCall }: IControlProps) => {
   const client = useClient()
+  const navigate = useNavigate()
   const [trackState, setTrackState] = useState({ video: true, audio: true })
 
   const mute = async (type: "audio" | "video") => {
@@ -38,19 +42,22 @@ const Controls = ({ tracks, setStart, setInCall }: IControlProps) => {
     tracks[1].close()
     setStart(false)
     setInCall(false)
+    navigate('/')
   };
 
   return (
-    <div className="controls">
-      <p className={trackState.audio ? "on" : ""}
+    <div style={{ display: 'flex', flexDirection: 'row', position: 'absolute', bottom: '10vh', right: 0, left: 0, width: '100%', justifyContent: 'center', zIndex: 40 }}>
+      <IconButton className={trackState.audio ? "on" : ""} style={{ backgroundColor: 'lightgray' }}
         onClick={() => mute("audio")}>
-        {trackState.audio ? "MuteAudio" : "UnmuteAudio"}
-      </p>
-      <p className={trackState.video ? "on" : ""}
+        {trackState.audio ? <MicOff /> : <Mic />}
+      </IconButton>
+      <IconButton className={trackState.video ? "on" : ""} style={{ backgroundColor: 'lightgray', marginLeft: '2vh', marginRight: '2vh' }}
         onClick={() => mute("video")}>
-        {trackState.video ? "MuteVideo" : "UnmuteVideo"}
-      </p>
-      {<p onClick={() => leaveChannel()}>Leave</p>}
+        {trackState.video ? <VideocamOff /> : <Videocam />}
+      </IconButton>
+      {<IconButton onClick={() => leaveChannel()} style={{ backgroundColor: 'darkred', color: 'white' }}>
+          <CallEnd />
+      </IconButton>}
     </div>
   );
 };
