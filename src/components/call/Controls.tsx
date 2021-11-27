@@ -46,7 +46,7 @@ const Controls = ({ tracks, setStart, setInCall }: IControlProps) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', position: 'absolute', bottom: '10vh', right: 0, left: 0, width: '100%', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'row', position: 'absolute', bottom: '10vh', right: 0, left: 0, width: '100%', justifyContent: 'center', zIndex: 40 }}>
       <IconButton className={trackState.audio ? "on" : ""} style={{ backgroundColor: 'lightgray' }}
         onClick={() => mute("audio")}>
         {trackState.audio ? <MicOff /> : <Mic />}
