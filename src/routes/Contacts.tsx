@@ -11,16 +11,21 @@ import {
   ListItemSecondaryAction,
   Card,
   Typography,
-  Button
+  Button,
+  Menu,
+  MenuItem
 } from '@material-ui/core'
 import Header from '../components/structure/Header'
 import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux/hooks'
 import { selectAllMembers, selectUserFamilyId, selectUserId, selectUserLoggedIn } from '../redux/selectors'
-import { PhoneEnabled } from '@material-ui/icons'
+import { MoreHoriz, PhoneEnabled } from '@material-ui/icons'
 import { loadFamily } from '../redux/slices/Family'
 import ListSkeleton from 'src/components/structure/ListSkeleton'
+import { openModal } from 'src/redux/slices/App'
+import { MODALS } from 'src/types/App'
+import { TUser } from 'src/types/User'
 
 const Contact = () => {
   const navigate = useNavigate()
@@ -28,7 +33,9 @@ const Contact = () => {
   const theme = useTheme()
 
   const [loading, setLoading] = useState(true)
-
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [selected, setSelected] = useState<TUser | undefined>()
+  
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const loggedIn = useAppSelector(selectUserLoggedIn)
   const userId = useAppSelector(selectUserId)
@@ -43,10 +50,37 @@ const Contact = () => {
     } else setLoading(false)
   }, [loggedIn, dispatch, familyMembers.length, navigate, userFamilyId])
 
+  const handlePeak = () => {
+    if (!selected) return
+    dispatch(openModal({
+      name: MODALS.PEAK_MEMBER,
+      params: {
+        id: selected.id
+      }
+    }))
+  }
+  const handleMenu = (e: React.MouseEvent<HTMLElement>, member: TUser) => {
+    setSelected(member)
+    setAnchorEl(e.currentTarget)
+  }
+  const handleClose = () => {
+    setSelected(undefined)
+    setAnchorEl(null)
+  }
+
   return (
     <React.Fragment>
       <Header title="Contacts" imageSrc="/calls.svg" />
       <Divider />
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handlePeak}>Details</MenuItem>
+        <MenuItem disabled>Enoyer un message</MenuItem>
+      </Menu>
       <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {} }>
         <List>
           {familyMembers.map((member) => (
@@ -62,6 +96,11 @@ const Contact = () => {
                   onClick={() => navigate('/Call')}
                 >
                   <PhoneEnabled />
+                </IconButton>
+                <IconButton
+                  onClick={(e) => handleMenu(e, member)}
+                >
+                  <MoreHoriz />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>

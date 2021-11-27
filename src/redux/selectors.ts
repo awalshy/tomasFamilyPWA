@@ -2,7 +2,8 @@ export {
   selectAllMembers,
   selectFamilyCode,
   selectFamilyName,
-  selectFamilyNbMembers
+  selectFamilyNbMembers,
+  selectMemberById
 } from './slices/Family'
 export {
   selectAllMessages,

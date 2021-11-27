@@ -7,10 +7,12 @@ import { MODALS } from 'src/types/App'
 // Modals
 import UploadPictureModal from 'src/modal/UploadPictureModal'
 import EditFamily from 'src/modal/EditFamily'
+import PeakMember from 'src/modal/PeakMember'
 
-const getModal = (modal: MODALS, _ownerId: string, _params: any): JSX.Element => {
+const getModal = (modal: MODALS, _ownerId: string, params: any): JSX.Element => {
   if (modal === MODALS.UPLOAD_PICTURE) return <UploadPictureModal />
   if (modal === MODALS.EDIT_FAMILY) return <EditFamily />
+  if (modal === MODALS.PEAK_MEMBER) return <PeakMember id={params.id} />
   return <div></div>
 }
 
