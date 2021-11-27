@@ -9,7 +9,8 @@ export {
   selectMessagesOfConv
 } from './slices/Messages'
 export {
-  selectAllConvs
+  selectAllConvs,
+  selectConvById
 } from './slices/Conversations'
 export {
   selectModal,

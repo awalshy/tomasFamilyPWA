@@ -77,7 +77,7 @@ const Nav = ({
       >
         <Toolbar>
           <div style={isMobile || !loggedIn ? { flexGrow: 1 } : {}} className={classes.title}>
-            {location.pathname === '/Profile' && (
+            {(location.pathname === '/Profile' || location.pathname.includes('/Conversation/')) && (
               <IconButton
                 onClick={() => navigate(-1)}
               >

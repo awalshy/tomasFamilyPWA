@@ -2,7 +2,8 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSelector,
-  createSlice
+  createSlice,
+  PayloadAction
 } from '@reduxjs/toolkit'
 import API from '../../firebase/api'
 import { TMessage } from '../../types/Message'
@@ -11,19 +12,10 @@ import { RootState } from '../store'
 // Adapter
 const messagesAdapter = createEntityAdapter<TMessage>({
   selectId: m => m.id,
-  sortComparer: (a, b) => b.date.getTime() - a.date.getTime()
+  sortComparer: (a, b) => b.date - a.date
 })
 
 // Async Thunks
-export const addMessage = createAsyncThunk(
-  'messages/addMessage',
-  async ({ message, convId }: { message: TMessage, convId: string }) => {
-    const api = new API()
-    const msg = await api.messages.sendMessage(convId, message)
-    return msg
-  }
-)
-
 export const getMessagesInConv = createAsyncThunk(
   'messages/getConv',
   async (convId: string) => {
@@ -37,7 +29,7 @@ export const sendMessage = createAsyncThunk(
   'message/sendMessage',
   async (message: TMessage) => {
     const api = new API()
-    const m = await api.messages.sendMessage(message.conversationId, message)
+    const m = await api.messages.sendMessage(message)
     return m
   }
 )
@@ -47,26 +39,38 @@ const initialState = messagesAdapter.getInitialState()
 const messageSlice = createSlice({
   name: 'messages',
   initialState,
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(addMessage.fulfilled, (state, action) => {
+  reducers: {
+    addMessage(state, action: PayloadAction<TMessage>) {
       messagesAdapter.addOne(state, action.payload)
-    })
+    },
+    // updateMessage(state, action: PayloadAction<TMessage>) {
+    //   messagesAdapter.updateOne(state, action.payload)
+    // },
+    // deleteMessage(state, action: PayloadAction<TMessage>) {
+    //   messagesAdapter.removeOne(state, action.payload.id)
+    // }
+  },
+  extraReducers: builder => {
     builder.addCase(getMessagesInConv.fulfilled, (state, action) => {
       messagesAdapter.upsertMany(state, action.payload)
     })
     builder.addCase(sendMessage.fulfilled, (state, action) => {
-      messagesAdapter.addOne(state, action)
+      messagesAdapter.addOne(state, action.payload)
     })
   }
 })
+
+// Actions
+export const {
+  addMessage
+} = messageSlice.actions
 
 // Reducers
 export default messageSlice.reducer
 
 // Selectors
 export const {
-  selectAll: selectAllMessages
+  selectAll: selectAllMessages,
 } = messagesAdapter.getSelectors<RootState>(state => state.messages)
 
 export const selectMessagesOfConv = createSelector(

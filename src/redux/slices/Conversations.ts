@@ -53,5 +53,6 @@ export default convsSlice.reducer
 
 // Selectors
 export const {
-  selectAll: selectAllConvs
+  selectAll: selectAllConvs,
+  selectById: selectConvById
 } = convsAdapter.getSelectors<RootState>(state => state.convs)
