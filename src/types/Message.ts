@@ -4,5 +4,5 @@ export type TMessage = {
   senderId: string,
   content: string,
   read: boolean,
-  date: Date
+  date: number
 }

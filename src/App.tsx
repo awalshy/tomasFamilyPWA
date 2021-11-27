@@ -14,6 +14,7 @@ import Profile from './routes/Profile';
 import { useEffect } from 'react';
 import { loadUser } from './redux/slices/App';
 import Register from './routes/Register';
+import Conversation from './routes/Conversation';
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -53,6 +54,7 @@ function App() {
             <Route path="*" element={<Error404 />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/Register" element={<Register />} />
+            <Route path="/Conversation/:id" element={<Conversation />} />
           </Routes>
         </BrowserRouter>
         <ModalController />

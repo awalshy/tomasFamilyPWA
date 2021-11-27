@@ -21,5 +21,5 @@ export interface IAppState {
   user: undefined | TUser,
   loggedIn: boolean,
   loading: boolean,
-  error: string,
+  error: string
 }
