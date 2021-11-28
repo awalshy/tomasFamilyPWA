@@ -37,7 +37,7 @@ function AccountCreation({
             done()
           })
         } catch(err) {
-          console.error(err)
+          console.error('ERROR', err)
           setOnce(false)
         }
     }

@@ -6,15 +6,16 @@ import ModalController from './components/app/ModalController';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import firebaseConfig from './config/firebase-config.json'
 import firebase from 'firebase'
-import Home from './routes/Home';
-import SignIn from './routes/SignIn';
-import Error404 from './routes/404';
-import Call from './routes/Call';
-import Profile from './routes/Profile';
-import { useEffect } from 'react';
-import { loadUser } from './redux/slices/App';
-import Register from './routes/Register';
-import Conversation from './routes/Conversation';
+import Home from './routes/Home'
+import SignIn from './routes/SignIn'
+import Error404 from './routes/404'
+import Call from './routes/Call'
+import Profile from './routes/Profile'
+import { useEffect } from 'react'
+import { loadUser } from './redux/slices/App'
+import Register from './routes/Register'
+import Conversation from './routes/Conversation'
+import { ToastContainer } from 'react-toastify'
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -46,18 +47,27 @@ function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={createTheme(themeOptions)}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/SignIn" element={<SignIn />} />
-            <Route path="/Call" element={<Call />} />
-            <Route path="*" element={<Error404 />} />
-            <Route path="/Profile" element={<Profile />} />
-            <Route path="/Register" element={<Register />} />
-            <Route path="/Conversation/:id" element={<Conversation />} />
-          </Routes>
-        </BrowserRouter>
-        <ModalController />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/SignIn" element={<SignIn />} />
+              <Route path="/Call" element={<Call />} />
+              <Route path="*" element={<Error404 />} />
+              <Route path="/Profile" element={<Profile />} />
+              <Route path="/Register" element={<Register />} />
+              <Route path="/Conversation/:id" element={<Conversation />} />
+            </Routes>
+          </BrowserRouter>
+          <ModalController />
+          <ToastContainer
+            autoClose={4000}
+            pauseOnHover={false}
+            draggableDirection='x'
+            limit={3}
+            position="bottom-right"
+            theme="colored"
+            hideProgressBar
+          />
       </ThemeProvider>
     </Provider>
   )

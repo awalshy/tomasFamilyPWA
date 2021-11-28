@@ -4,6 +4,8 @@ import { collecs } from 'src/firebase/api'
 import { TUser } from 'src/types/User'
 import { IAppState, TModalState } from 'src/types/App'
 import { RootState } from 'src/redux/store'
+import { toast } from 'react-toastify'
+import { getFirebaseError } from 'src/firebase/errors'
 
 const initialState: IAppState = {
   ready: false,
@@ -47,10 +49,6 @@ export const signUpUser = createAsyncThunk(
     // Register User
     await firebase.auth()
       .createUserWithEmailAndPassword(email, password)
-      .catch(err => {
-        console.error(err)
-        throw Error(err)
-      })
   }
 )
 
@@ -154,7 +152,7 @@ const appSlice = createSlice({
     },
     closeModal(state) {
       state.modal = null
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(signUpUser.pending, (state, _action) => {
@@ -165,6 +163,7 @@ const appSlice = createSlice({
     builder.addCase(signUpUser.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || 'Error'
+      toast.error(getFirebaseError(action.error.code))
     })
     builder.addCase(signUpUser.fulfilled, (state, _action) => {
       state.loading = false
@@ -177,6 +176,7 @@ const appSlice = createSlice({
     builder.addCase(signUpUserDetails.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || 'Error'
+      toast.error(getFirebaseError(action.error.code))
     })
     builder.addCase(signUpUserDetails.fulfilled, (state, _action) => {
       state.loading = false
@@ -189,11 +189,13 @@ const appSlice = createSlice({
     builder.addCase(signUpUserFamily.rejected, (state, action) => {
       state.loading = false
       state.error = action.error.message || 'Error'
+      toast.error(getFirebaseError(action.error.code))
     })
     builder.addCase(signUpUserFamily.fulfilled, (state, action) => {
       state.loading = false
       state.loggedIn = true
       state.user = action.payload
+      toast.success('Compte créé avec succès !')
     })
     builder.addCase(signInUser.pending, (state, _action) => {
       state.loading = true
@@ -202,10 +204,12 @@ const appSlice = createSlice({
       state.loading = false
       state.loggedIn = true
       state.user = action.payload
+      toast.success(action.payload?.firstName ? `Bonjour ${action.payload?.firstName}` : 'Connecté !')
     })
     builder.addCase(signInUser.rejected, (state, action) => {
       state.error = action.error.message || 'Error'
       state.loading = false
+      toast.error(getFirebaseError(action.error.code))
     })
     builder.addCase(loadUser.fulfilled, (state, action) => {
       state.user = action.payload
@@ -220,6 +224,7 @@ const appSlice = createSlice({
       state.loading = false
       state.loggedIn = false
       state.user = undefined
+      toast.success('Déconnecté !')
     })
   }
 })
@@ -228,7 +233,7 @@ export const {
   appReady,
   updateUser,
   closeModal,
-  openModal,
+  openModal
 } = appSlice.actions
 
 export const selectUserId = (state: RootState) => state.app.user?.id
