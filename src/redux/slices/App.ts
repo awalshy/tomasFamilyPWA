@@ -126,6 +126,7 @@ export const loadUser = createAsyncThunk(
       email,
       firstName: data.firstName,
       lastName: data.lastName,
+      admin: data.admin,
       familyId: familyRef.id
     } as TUser
   }
