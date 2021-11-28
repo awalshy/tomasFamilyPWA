@@ -65,7 +65,7 @@ function Profile() {
             <Typography>{`Nom ${familyName}`}</Typography>
             <Typography>{`${familyNbMembers} Membre${familyNbMembers > 1 ? 's' : ''}`}</Typography>
             <div style={{ marginTop: '1vh', display: 'flex', width: '100%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-              <Button
+              {user && user.admin && <Button
                 variant="contained"
                 color="primary"
                 onClick={() => dispatch(openModal({
@@ -74,7 +74,7 @@ function Profile() {
                 }))}
               >
                 Editer
-              </Button>
+              </Button>}
               {showCode ? (
                 <Typography style={{ marginLeft: '2vw' }}>{familyCode?.toLocaleUpperCase()}</Typography>
               ): (

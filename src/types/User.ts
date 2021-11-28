@@ -3,5 +3,6 @@ export type TUser = {
   firstName: string,
   lastName: string,
   familyId: string,
-  email: string
+  email: string,
+  admin?: boolean
 }

@@ -63,7 +63,8 @@ class FamiliesController {
         lastName: data.lastName,
         firstName: data.firstName,
         email: '',
-        familyId: familyId
+        familyId: familyId,
+        admin: data.admin
       })
     }
     return familyMembers
@@ -82,6 +83,7 @@ class FamiliesController {
   }
 
   async removeMember(member: TUser): Promise<void> {
+    if (member.admin) return
     const memberRef = firebase.firestore().collection(collecs.users).doc(member.id)
     await memberRef.delete()
   }
@@ -220,6 +222,7 @@ class UsersController {
       firstName: data.firstname,
       lastName: data.lastname,
       familyId: data.familyId,
+      admin: data.admin,
       email: ''
     } as TUser
   }
