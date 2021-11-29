@@ -12,6 +12,34 @@ import { ExpirationPlugin } from 'workbox-expiration'
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
+import firebase from 'firebase'
+import firebaseConfig from './config/firebase-config.json'
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig)
+  console.warn('[SW] Registering firebase and firebase messaging')
+  firebase
+    .messaging()
+    .getToken({
+      vapidKey:
+        'BAqnVgBE6zpqitj8JAZugVwQvwI5wvA4TCXZliUHBu0vhDvJ1ym70S83pv8Hs82cXvuYVymFg-VaMQM7h0OBxpI',
+    }).catch(err => {
+      console.error(err)
+    })
+  
+  firebase.messaging().onBackgroundMessage(payload => {
+    console.log('Background Message', payload)
+    if (!payload.notification?.title) return
+    const notificationTitle = `Nouveau message: ${payload.notification?.title}`
+    const notificationOptions = {
+      body: payload.notification?.body,
+      icon: '/logo.png'
+    }
+
+    self.registration.showNotification(notificationTitle,
+      notificationOptions)
+  })
+}
 
 declare const self: ServiceWorkerGlobalScope
 
@@ -75,5 +103,3 @@ self.addEventListener('message', (event) => {
     self.skipWaiting()
   }
 })
-
-// Any other custom service worker logic can go here.
