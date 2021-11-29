@@ -1,17 +1,13 @@
+import { IconButton } from '@material-ui/core'
+import { CallEnd, Mic, MicOff, Videocam, VideocamOff } from '@material-ui/icons'
+import { IMicrophoneAudioTrack, ICameraVideoTrack } from 'agora-rtc-react'
 import { useState } from 'react'
-import {
-  IMicrophoneAudioTrack,
-  ICameraVideoTrack
-} from 'agora-rtc-react'
-import {
-  useClient
-} from 'src/config/agora'
-import { IconButton } from '@material-ui/core';
 import { useNavigate } from 'react-router'
-import { CallEnd, Mic, MicOff, Videocam, VideocamOff } from '@material-ui/icons';
+
+import { useClient } from 'src/config/agora'
 
 interface IControlProps {
-  tracks: [IMicrophoneAudioTrack, ICameraVideoTrack];
+  tracks: [IMicrophoneAudioTrack, ICameraVideoTrack]
   setStart: (v: boolean) => void
   setInCall: (v: boolean) => void
 }
@@ -21,19 +17,19 @@ const Controls = ({ tracks, setStart, setInCall }: IControlProps) => {
   const navigate = useNavigate()
   const [trackState, setTrackState] = useState({ video: true, audio: true })
 
-  const mute = async (type: "audio" | "video") => {
-    if (type === "audio") {
+  const mute = async (type: 'audio' | 'video') => {
+    if (type === 'audio') {
       await tracks[0].setEnabled(!trackState.audio)
       setTrackState((ps) => {
         return { ...ps, audio: !ps.audio }
       })
-    } else if (type === "video") {
+    } else if (type === 'video') {
       await tracks[1].setEnabled(!trackState.video)
       setTrackState((ps) => {
         return { ...ps, video: !ps.video }
       })
     }
-  };
+  }
 
   const leaveChannel = async () => {
     await client.leave()
@@ -43,23 +39,46 @@ const Controls = ({ tracks, setStart, setInCall }: IControlProps) => {
     setStart(false)
     setInCall(false)
     navigate('/')
-  };
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', position: 'absolute', bottom: '10vh', right: 0, left: 0, width: '100%', justifyContent: 'center', zIndex: 40 }}>
-      <IconButton className={trackState.audio ? "on" : ""} style={{ backgroundColor: 'lightgray' }}
-        onClick={() => mute("audio")}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        position: 'absolute',
+        bottom: '10vh',
+        right: 0,
+        left: 0,
+        width: '100%',
+        justifyContent: 'center',
+        zIndex: 40,
+      }}
+    >
+      <IconButton
+        className={trackState.audio ? 'on' : ''}
+        style={{ backgroundColor: 'lightgray' }}
+        onClick={() => mute('audio')}
+      >
         {trackState.audio ? <MicOff /> : <Mic />}
       </IconButton>
-      <IconButton className={trackState.video ? "on" : ""} style={{ backgroundColor: 'lightgray', marginLeft: '2vh', marginRight: '2vh' }}
-        onClick={() => mute("video")}>
+      <IconButton
+        className={trackState.video ? 'on' : ''}
+        style={{ backgroundColor: 'lightgray', marginLeft: '2vh', marginRight: '2vh' }}
+        onClick={() => mute('video')}
+      >
         {trackState.video ? <VideocamOff /> : <Videocam />}
       </IconButton>
-      {<IconButton onClick={() => leaveChannel()} style={{ backgroundColor: 'darkred', color: 'white' }}>
+      {
+        <IconButton
+          onClick={() => leaveChannel()}
+          style={{ backgroundColor: 'darkred', color: 'white' }}
+        >
           <CallEnd />
-      </IconButton>}
+        </IconButton>
+      }
     </div>
-  );
-};
+  )
+}
 
 export default Controls

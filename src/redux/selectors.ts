@@ -3,16 +3,10 @@ export {
   selectFamilyCode,
   selectFamilyName,
   selectFamilyNbMembers,
-  selectMemberById
+  selectMemberById,
 } from './slices/Family'
-export {
-  selectAllMessages,
-  selectMessagesOfConv
-} from './slices/Messages'
-export {
-  selectAllConvs,
-  selectConvById
-} from './slices/Conversations'
+export { selectAllMessages, selectMessagesOfConv } from './slices/Messages'
+export { selectAllConvs, selectConvById } from './slices/Conversations'
 export {
   selectModal,
   selectUserId,

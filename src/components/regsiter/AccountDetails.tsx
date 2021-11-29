@@ -1,21 +1,17 @@
 import { TextField } from '@material-ui/core'
 
 interface IAccountDetails {
-  setFirstname: (v: string) => void,
-  setLastname: (v: string) => void,
-  lastname: string,
+  setFirstname: (v: string) => void
+  setLastname: (v: string) => void
+  lastname: string
   firstname: string
 }
 
-function AccountDetails({
-  lastname,
-  firstname,
-  setFirstname,
-  setLastname
-}: IAccountDetails) {
-
+function AccountDetails({ lastname, firstname, setFirstname, setLastname }: IAccountDetails) {
   return (
-    <div style={{ display: 'flex', marginLeft: '25%', marginRight: '25%', flexDirection: 'column' }}>
+    <div
+      style={{ display: 'flex', marginLeft: '25%', marginRight: '25%', flexDirection: 'column' }}
+    >
       <TextField
         style={{ margin: 10, width: '80%' }}
         value={firstname}

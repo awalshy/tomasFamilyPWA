@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import VideoCall from '../components/call/VideoCall'
-import ChannelForm from '../components/call/ChannelForm'
+
+import ChannelForm from 'src/components/call/ChannelForm'
+import VideoCall from 'src/components/call/VideoCall'
 
 const Call = () => {
   const [inCall, setInCall] = useState(false)

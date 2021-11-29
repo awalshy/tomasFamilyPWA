@@ -1,20 +1,12 @@
-import {
-  BottomNavigation,
-  BottomNavigationAction
-} from '@material-ui/core'
+import { BottomNavigation, BottomNavigationAction } from '@material-ui/core'
 import {
   Image as GalleryIcon,
   People as ContactIcon,
-  Chat as MessagesIcon
+  Chat as MessagesIcon,
 } from '@material-ui/icons'
 import { useLocation, useNavigate } from 'react-router'
 
-function BottomNav({
-  value, setValue
-}: {
-  value?: number,
-  setValue?: (v: number) => void
-}) {
+function BottomNav({ value, setValue }: { value?: number; setValue?: (v: number) => void }) {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -23,10 +15,8 @@ function BottomNav({
       <BottomNavigation
         value={value}
         onChange={(_event, newValue) => {
-          if (setValue)
-            setValue(newValue)
-          if (location.pathname !== '/')
-            navigate('/')
+          if (setValue) setValue(newValue)
+          if (location.pathname !== '/') navigate('/')
         }}
       >
         <BottomNavigationAction label="Conversations" icon={<MessagesIcon />} />

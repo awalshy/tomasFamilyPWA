@@ -13,19 +13,28 @@ import {
   Typography,
   Button,
   Menu,
-  MenuItem
+  MenuItem,
 } from '@material-ui/core'
-import Header from '../components/structure/Header'
-import { useNavigate } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../redux/hooks'
-import { selectAllMembers, selectUserFamilyId, selectUserId, selectUserLoggedIn } from '../redux/selectors'
 import { MoreHoriz, PhoneEnabled } from '@material-ui/icons'
-import { loadFamily } from '../redux/slices/Family'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import ListSkeleton from 'src/components/structure/ListSkeleton'
+
 import { openModal } from 'src/redux/slices/App'
+
 import { MODALS } from 'src/types/App'
 import { TUser } from 'src/types/User'
+
+import Header from '../components/structure/Header'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import {
+  selectAllMembers,
+  selectUserFamilyId,
+  selectUserId,
+  selectUserLoggedIn,
+} from '../redux/selectors'
+import { loadFamily } from '../redux/slices/Family'
 
 const Contact = () => {
   const navigate = useNavigate()
@@ -35,12 +44,12 @@ const Contact = () => {
   const [loading, setLoading] = useState(true)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [selected, setSelected] = useState<TUser | undefined>()
-  
+
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const loggedIn = useAppSelector(selectUserLoggedIn)
   const userId = useAppSelector(selectUserId)
   const userFamilyId = useAppSelector(selectUserFamilyId)
-  const familyMembers = useAppSelector(selectAllMembers).filter(m => m.id !== userId)
+  const familyMembers = useAppSelector(selectAllMembers).filter((m) => m.id !== userId)
 
   useEffect(() => {
     if (!loggedIn) navigate('/SignIn', { replace: true })
@@ -52,12 +61,14 @@ const Contact = () => {
 
   const handlePeak = () => {
     if (!selected) return
-    dispatch(openModal({
-      name: MODALS.PEAK_MEMBER,
-      params: {
-        id: selected.id
-      }
-    }))
+    dispatch(
+      openModal({
+        name: MODALS.PEAK_MEMBER,
+        params: {
+          id: selected.id,
+        },
+      })
+    )
   }
   const handleMenu = (e: React.MouseEvent<HTMLElement>, member: TUser) => {
     setSelected(member)
@@ -72,51 +83,45 @@ const Contact = () => {
     <React.Fragment>
       <Header title="Contacts" imageSrc="/calls.svg" />
       <Divider />
-      <Menu
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
+      <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={handlePeak}>Details</MenuItem>
         <MenuItem disabled>Enoyer un message</MenuItem>
       </Menu>
-      <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {} }>
+      <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {}}>
         <List>
           {familyMembers.map((member) => (
-            <ListItem key={member.id} >
+            <ListItem key={member.id}>
               <ListItemAvatar>
                 <Avatar>{member.firstName[0] + member.lastName[0]}</Avatar>
               </ListItemAvatar>
-              <ListItemText>
-                {member.firstName + ' ' + member.lastName}
-              </ListItemText>
+              <ListItemText>{member.firstName + ' ' + member.lastName}</ListItemText>
               <ListItemSecondaryAction>
-                <IconButton
-                  onClick={() => navigate('/Call')}
-                >
+                <IconButton onClick={() => navigate('/Call')}>
                   <PhoneEnabled />
                 </IconButton>
-                <IconButton
-                  onClick={(e) => handleMenu(e, member)}
-                >
+                <IconButton onClick={(e) => handleMenu(e, member)}>
                   <MoreHoriz />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
-        {familyMembers.length === 0 && loading && ['0', '1', '2'].map(key => (
-          <ListSkeleton key={key} />
-        ))}
+        {familyMembers.length === 0 &&
+          loading &&
+          ['0', '1', '2'].map((key) => <ListSkeleton key={key} />)}
         {familyMembers.length === 0 && !loading && (
-          <Card elevation={3} style={{ padding: 20, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 12 }}>
+          <Card
+            elevation={3}
+            style={{
+              padding: 20,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 12,
+            }}
+          >
             <Typography>Vous êtes seul dans votre famille...</Typography>
-            <Button
-              onClick={() => navigate('/Profile')}
-            >
-              Invitez Les !
-            </Button>
+            <Button onClick={() => navigate('/Profile')}>Invitez Les !</Button>
           </Card>
         )}
       </div>

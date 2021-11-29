@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -12,25 +11,23 @@ import {
   useTheme,
   useMediaQuery,
   makeStyles,
-  createStyles
+  createStyles,
 } from '@material-ui/core'
-import {
-  AccountCircle,
-  ArrowBackSharp
-} from '@material-ui/icons'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { AccountCircle, ArrowBackSharp } from '@material-ui/icons'
 import firebase from 'firebase'
+import React, { useState } from 'react'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 
-import { selectUser, selectUserLoggedIn } from 'src/redux/selectors'
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
+import { selectUser, selectUserLoggedIn } from 'src/redux/selectors'
 import { signOutUser } from 'src/redux/slices/App'
 
 const Nav = ({
   children,
-  setValue = (v: number) => console.error('Forgot Set Value', v)
+  setValue = (v: number) => console.error('Forgot Set Value', v),
 }: {
-  children: JSX.Element | JSX.Element[],
-  value?: number,
+  children: JSX.Element | JSX.Element[]
+  value?: number
   setValue?: (v: number) => void
 }) => {
   const navigate = useNavigate()
@@ -46,8 +43,7 @@ const Nav = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) =>
-    setAnchorEl(event.currentTarget)
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -63,37 +59,33 @@ const Nav = ({
   }
   const handleNavClick = (id: number) => {
     setValue(id)
-    if (location.pathname !== '/')
-      navigate('/')
+    if (location.pathname !== '/') navigate('/')
   }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        color="primary"
-        className={classes.appBar}
-      >
+      <AppBar position="fixed" color="primary" className={classes.appBar}>
         <Toolbar>
           <div style={isMobile || !loggedIn ? { flexGrow: 1 } : {}} className={classes.title}>
             {(location.pathname === '/Profile' || location.pathname.includes('/Conversation/')) && (
-              <IconButton
-                onClick={() => navigate(-1)}
-              >
+              <IconButton onClick={() => navigate(-1)}>
                 <ArrowBackSharp style={{ color: 'white' }} />
               </IconButton>
             )}
             <Link to="/">
-              <img
-                height="40"
-                width="200"
-                alt="TOMAS Logo"
-                src="/LogoColorLight.svg"
-              />
+              <img height="40" width="200" alt="TOMAS Logo" src="/LogoColorLight.svg" />
             </Link>
           </div>
-          {!isMobile && loggedIn && <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+          {!isMobile && loggedIn && (
+            <div
+              style={{
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+              }}
+            >
               <div onClick={() => handleNavClick(0)}>
                 <Typography variant="h6">Messages</Typography>
               </div>
@@ -103,13 +95,12 @@ const Nav = ({
               <div onClick={() => handleNavClick(2)}>
                 <Typography variant="h6">Gallerie</Typography>
               </div>
-          </div>}
+            </div>
+          )}
           {loggedIn && (
             <div>
               <div className={classes.container}>
-                <Typography className={classes.user}>
-                  Hi {user?.firstName} !
-                </Typography>
+                <Typography className={classes.user}>Hi {user?.firstName} !</Typography>
                 <IconButton
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
@@ -135,9 +126,7 @@ const Nav = ({
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={() => navigate('/Profile')}>
-                  Profile
-                </MenuItem>
+                <MenuItem onClick={() => navigate('/Profile')}>Profile</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </div>
@@ -155,9 +144,7 @@ const Nav = ({
           )}
         </Toolbar>
       </AppBar>
-      <div className={classes.rootChildren}>
-        {children}
-      </div>
+      <div className={classes.rootChildren}>{children}</div>
     </div>
   )
 }
@@ -174,7 +161,7 @@ const useStyle = makeStyles((theme: Theme) =>
       paddingLeft: '2vw',
       paddingRight: '2vw',
       width: '100vw',
-      backgroundColor: '#e6e6e6'
+      backgroundColor: '#e6e6e6',
     },
     appBar: {
       transition: theme.transitions.create(['width', 'margin'], {
@@ -203,20 +190,20 @@ const useStyle = makeStyles((theme: Theme) =>
       marginLeft: 0,
     },
     subtitle: {
-      marginLeft: 15
+      marginLeft: 15,
     },
     title: {
       flexDirection: 'row',
       display: 'flex',
       justifyContent: 'space-arround',
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     user: {
       marginRight: '1vw',
       color: 'white',
       [theme.breakpoints.down('md')]: {
-        display: 'none'
-      }
+        display: 'none',
+      },
     },
     container: {
       display: 'flex',

@@ -1,13 +1,31 @@
-import { Avatar, Button, Divider, Grid, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import {
+  Avatar,
+  Button,
+  Divider,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+
 import Header from 'src/components/structure/Header'
+import PageLayout from 'src/components/structure/PageLayout'
+
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
-import { selectAppLoading, selectFamilyNbMembers, selectFamilyCode, selectFamilyName, selectUser, selectUserLoggedIn } from 'src/redux/selectors'
+import {
+  selectAppLoading,
+  selectFamilyNbMembers,
+  selectFamilyCode,
+  selectFamilyName,
+  selectUser,
+  selectUserLoggedIn,
+} from 'src/redux/selectors'
 import { openModal, signOutUser } from 'src/redux/slices/App'
 import { loadFamily } from 'src/redux/slices/Family'
+
 import { MODALS } from 'src/types/App'
-import PageLayout from '../components/structure/PageLayout'
 
 function Profile() {
   const navigate = useNavigate()
@@ -26,8 +44,7 @@ function Profile() {
 
   useEffect(() => {
     if (!loggedIn || !user) navigate('/SignIn')
-    if (!familyCode && user)
-      dispatch(loadFamily(user.familyId))
+    if (!familyCode && user) dispatch(loadFamily(user.familyId))
   }, [loggedIn, navigate, user, dispatch, familyCode])
 
   const handleSignOut = () => {
@@ -40,21 +57,22 @@ function Profile() {
 
   return (
     <PageLayout title="Profile">
-      <Header
-        title="Profile"
-        imageSrc="/profile.svg"
-      />
-      <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {  }}>
+      <Header title="Profile" imageSrc="/profile.svg" />
+      <div style={!isMobile ? { paddingLeft: '25vw', paddingRight: '25vw' } : {}}>
         <Grid container style={{ display: 'flex', justifyContent: 'center' }}>
-          <Grid xs={4} item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Avatar
-              style={{ width: '10vh', height: '10vh', padding: '2vh' }}
-            >
+          <Grid
+            xs={4}
+            item
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Avatar style={{ width: '10vh', height: '10vh', padding: '2vh' }}>
               {user?.firstName[0] || '' + user?.lastName[0] || ''}
             </Avatar>
           </Grid>
           <Grid xs={6} item>
-            <Typography variant="h4">{`${user?.firstName || ''} ${user?.lastName || ''}`}</Typography>
+            <Typography variant="h4">{`${user?.firstName || ''} ${
+              user?.lastName || ''
+            }`}</Typography>
             <Typography variant="body2">{user?.email}</Typography>
           </Grid>
         </Grid>
@@ -64,38 +82,62 @@ function Profile() {
             <Typography variant="h5">Famille</Typography>
             <Typography>{`Nom ${familyName}`}</Typography>
             <Typography>{`${familyNbMembers} Membre${familyNbMembers > 1 ? 's' : ''}`}</Typography>
-            <div style={{ marginTop: '1vh', display: 'flex', width: '100%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-              {user && user.admin && <Button
-                variant="contained"
-                color="primary"
-                onClick={() => dispatch(openModal({
-                  name: MODALS.EDIT_FAMILY,
-                  params: {}
-                }))}
-              >
-                Editer
-              </Button>}
+            <div
+              style={{
+                marginTop: '1vh',
+                display: 'flex',
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+              }}
+            >
+              {user && user.admin && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() =>
+                    dispatch(
+                      openModal({
+                        name: MODALS.EDIT_FAMILY,
+                        params: {},
+                      })
+                    )
+                  }
+                >
+                  Editer
+                </Button>
+              )}
               {showCode ? (
-                <Typography style={{ marginLeft: '2vw' }}>{familyCode?.toLocaleUpperCase()}</Typography>
-              ): (
-              <Button
-                onClick={handleShowCode}
-              >
-                Code Famille
-              </Button>)}
+                <Typography style={{ marginLeft: '2vw' }}>
+                  {familyCode?.toLocaleUpperCase()}
+                </Typography>
+              ) : (
+                <Button onClick={handleShowCode}>Code Famille</Button>
+              )}
             </div>
             <Divider style={{ marginTop: '2vh', marginBottom: '5vh' }} />
           </React.Fragment>
         )}
-        {isMobile && <div style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', position: 'absolute', bottom: '10vh', right: 0, left: 0, paddingRight: '2vw' }}>
-          <Button
-            onClick={handleSignOut}
-            variant="contained"
-            color="primary"
+        {isMobile && (
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              position: 'absolute',
+              bottom: '10vh',
+              right: 0,
+              left: 0,
+              paddingRight: '2vw',
+            }}
           >
-            {loading ? 'Déconnexion' : 'Se Déconnecter'}
-          </Button>
-        </div>}
+            <Button onClick={handleSignOut} variant="contained" color="primary">
+              {loading ? 'Déconnexion' : 'Se Déconnecter'}
+            </Button>
+          </div>
+        )}
       </div>
     </PageLayout>
   )

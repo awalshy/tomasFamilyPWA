@@ -1,0 +1,19 @@
+{
+  "printWidth": 100,
+  "tabWidth": 2,
+  "semi": false,
+  "bracketSpacing": true,
+  "singleQuote": true,
+  "importOrderSeparation": true,
+  "importOrderCaseInsensitive": true,
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^(./components|src/components)",
+    "^(src/redux|./redux)",
+    "^(src|.)/(routes|modal)(.*)$",
+    "^src/config(.*)$",
+    "^src/firebase(.*)$",
+    "^src/types(.*)$",
+    "^[./]"
+  ]
+}

@@ -1,18 +1,16 @@
-import PageLayout from '../components/structure/PageLayout'
-import { useNavigate } from 'react-router'
-import { useAppSelector } from '../redux/hooks'
-import { selectUserLoggedIn } from '../redux/selectors'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 
-import Messages from './Messages'
+import PageLayout from 'src/components/structure/PageLayout'
+
+import { useAppSelector } from 'src/redux/hooks'
+import { selectUserLoggedIn } from 'src/redux/selectors'
+
 import Contacts from './Contacts'
 import Gallery from './Gallery'
+import Messages from './Messages'
 
-const page = [
-   <Messages />,
-  <Contacts />,
-  <Gallery />
-]
+const page = [<Messages />, <Contacts />, <Gallery />]
 
 function Home() {
   const navigate = useNavigate()

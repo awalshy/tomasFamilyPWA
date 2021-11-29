@@ -1,14 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import 'react-toastify/dist/ReactToastify.css';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import 'react-toastify/dist/ReactToastify.css'
+
+import App from './App'
+import './index.css'
+import reportWebVitals from './reportWebVitals'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 ReactDOM.render(
   <React.StrictMode>
-      <App />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 )

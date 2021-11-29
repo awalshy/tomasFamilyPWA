@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react'
 import { TextField, Typography } from '@material-ui/core'
 import { Check } from '@material-ui/icons'
+import { useState, useEffect, useCallback } from 'react'
+
 import { useAppDispatch } from 'src/redux/hooks'
 import { signUpUser } from 'src/redux/slices/App'
 
@@ -8,9 +9,7 @@ interface IAccountCreate {
   done: () => void
 }
 
-function AccountCreation({
-  done
-}: IAccountCreate) {
+function AccountCreation({ done }: IAccountCreate) {
   const dispatch = useAppDispatch()
 
   const [email, setEmail] = useState('')
@@ -33,10 +32,12 @@ function AccountCreation({
       if (password !== '' && email !== '' && !once)
         try {
           setOnce(true)
-          dispatch(signUpUser({ email, password })).unwrap().then(_res => {
-            done()
-          })
-        } catch(err) {
+          dispatch(signUpUser({ email, password }))
+            .unwrap()
+            .then((_res) => {
+              done()
+            })
+        } catch (err) {
           console.error('ERROR', err)
           setOnce(false)
         }
@@ -44,12 +45,13 @@ function AccountCreation({
   }, [pwdConfirm, password, email, dispatch, done, once])
 
   useEffect(() => {
-    if (email && password && pwdConfirm)
-      checkPwdMatch()
+    if (email && password && pwdConfirm) checkPwdMatch()
   }, [pwdConfirm, password, email, checkPwdMatch])
 
   return (
-    <div style={{ display: 'flex', marginLeft: '25%', marginRight: '25%', flexDirection: 'column' }}>
+    <div
+      style={{ display: 'flex', marginLeft: '25%', marginRight: '25%', flexDirection: 'column' }}
+    >
       <TextField
         style={{ margin: 10, width: '80%' }}
         value={email}
@@ -74,15 +76,28 @@ function AccountCreation({
         type="password"
         placeholder="Confirmer le Mot de Passe"
       />
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '80%', marginTop: 15 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '80%',
+          marginTop: 15,
+        }}
+      >
         {pwdMatch && (
-          <Typography variant="body1" style={{ display: 'flex', alignItems: 'center', color: 'green' }}>
+          <Typography
+            variant="body1"
+            style={{ display: 'flex', alignItems: 'center', color: 'green' }}
+          >
             Mots de Passes indentiques
             <Check />
           </Typography>
         )}
         {error && (
-          <Typography variant="body2" style={{ color: 'red' }}>{error}</Typography>
+          <Typography variant="body2" style={{ color: 'red' }}>
+            {error}
+          </Typography>
         )}
       </div>
     </div>

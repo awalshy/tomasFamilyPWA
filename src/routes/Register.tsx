@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Card,
   Stepper,
@@ -8,21 +7,20 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-  CircularProgress
+  CircularProgress,
 } from '@material-ui/core'
-import PageLayout from 'src/components/structure/PageLayout'
+import { useState } from 'react'
+
 import AccountCreation from 'src/components/regsiter/AccountCreation'
+import AccountDetails from 'src/components/regsiter/AccountDetails'
+import FamilyJoin from 'src/components/regsiter/FamilyJoin'
+import PageLayout from 'src/components/structure/PageLayout'
+
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { selectAppLoading } from 'src/redux/selectors'
-import AccountDetails from 'src/components/regsiter/AccountDetails'
 import { signUpUserDetails } from 'src/redux/slices/App'
-import FamilyJoin from 'src/components/regsiter/FamilyJoin'
 
-const steps = [
-  'Créer un compte',
-  'Ajouter mes informations',
-  'Rejoindre ma famille'
-]
+const steps = ['Créer un compte', 'Ajouter mes informations', 'Rejoindre ma famille']
 
 function Register() {
   const theme = useTheme()
@@ -37,21 +35,28 @@ function Register() {
   const appLoading = useAppSelector(selectAppLoading)
 
   const handleNextStep = () => {
-    if (activeStep === 0)
-      setActiveStep(p => p + 1)
+    if (activeStep === 0) setActiveStep((p) => p + 1)
     if (activeStep === 1) {
       dispatch(signUpUserDetails({ firstName: firstname, lastName: lastname }))
-        .unwrap().then(_res => setActiveStep(p => p + 1))
+        .unwrap()
+        .then((_res) => setActiveStep((p) => p + 1))
     }
   }
-  const handlePrevStep = () => setActiveStep(p => p - 1)
+  const handlePrevStep = () => setActiveStep((p) => p - 1)
   const doneFn = () => setDone(true)
   const getStepContent = (step: number) => {
-    switch(step) {
+    switch (step) {
       case 0:
         return <AccountCreation done={doneFn} />
       case 1:
-        return <AccountDetails firstname={firstname} lastname={lastname} setFirstname={setFirstname} setLastname={setLastname} />
+        return (
+          <AccountDetails
+            firstname={firstname}
+            lastname={lastname}
+            setFirstname={setFirstname}
+            setLastname={setLastname}
+          />
+        )
       case 2:
         return <FamilyJoin />
       default:
@@ -61,34 +66,38 @@ function Register() {
 
   return (
     <PageLayout title="Register">
-      <Card style={Object.assign({ padding: 20, borderRadius: 12 }, !isMobile ? { marginLeft: '20vw', marginRight: '20vw' } : {})}>
-        <Typography variant="h4">
-          Créer un compte
-        </Typography>
+      <Card
+        style={Object.assign(
+          { padding: 20, borderRadius: 12 },
+          !isMobile ? { marginLeft: '20vw', marginRight: '20vw' } : {}
+        )}
+      >
+        <Typography variant="h4">Créer un compte</Typography>
         <Stepper activeStep={activeStep} alternativeLabel>
-          {steps.map(step => (
+          {steps.map((step) => (
             <Step key={step}>
               <StepLabel>{step}</StepLabel>
             </Step>
           ))}
         </Stepper>
+        <div>{getStepContent(activeStep)}</div>
         <div>
-          {getStepContent(activeStep)}
-        </div>
-        <div>
-          <Button
-            disabled={activeStep === 0}
-            onClick={handlePrevStep}
-          >
+          <Button disabled={activeStep === 0} onClick={handlePrevStep}>
             Précédent
           </Button>
           <Button
-            disabled={(activeStep === 0 && !done)}
+            disabled={activeStep === 0 && !done}
             variant="contained"
             color="primary"
             onClick={handleNextStep}
           >
-            {appLoading ? <CircularProgress variant="indeterminate" color="primary" /> : activeStep === steps.length - 1 ? 'Terminer' : 'Suivant'}
+            {appLoading ? (
+              <CircularProgress variant="indeterminate" color="primary" />
+            ) : activeStep === steps.length - 1 ? (
+              'Terminer'
+            ) : (
+              'Suivant'
+            )}
           </Button>
         </div>
       </Card>

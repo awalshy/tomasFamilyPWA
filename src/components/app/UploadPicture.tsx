@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import firebase from 'firebase'
 import { Button, CircularProgress } from '@material-ui/core'
+import firebase from 'firebase'
+import { useState } from 'react'
+
 import { useAppSelector } from 'src/redux/hooks'
 import { selectUserFamilyId } from 'src/redux/selectors'
 
@@ -41,24 +42,18 @@ const UploadPicture = () => {
         // )
         return
       }
-      const uploadTask = firebase
-        .storage()
-        .ref(`${familyId}/images/${file.name}.${ext}`)
-        .put(file)
-        uploadTask.on(
-          firebase.storage.TaskEvent.STATE_CHANGED, 
-          snapshot => {
-            const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            setProgress(prev => [
-              ...prev.slice(0, index),
-              percentage,
-              ...prev.slice(index + 1)
-            ])
-          },
-          (err: any) => {
-            // dispatch(enqueueSnack('Error Uploading Picture', { variant: 'error' }))
-            console.error('Error Upload Picture', err)
-          })
+      const uploadTask = firebase.storage().ref(`${familyId}/images/${file.name}.${ext}`).put(file)
+      uploadTask.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        (snapshot) => {
+          const percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          setProgress((prev) => [...prev.slice(0, index), percentage, ...prev.slice(index + 1)])
+        },
+        (err: any) => {
+          // dispatch(enqueueSnack('Error Uploading Picture', { variant: 'error' }))
+          console.error('Error Upload Picture', err)
+        }
+      )
     })
   }
 
@@ -95,10 +90,7 @@ const UploadPicture = () => {
                     borderRadius: 10,
                   }}
                 >
-                  <CircularProgress
-                    variant="determinate"
-                    value={progress[index]}
-                  />
+                  <CircularProgress variant="determinate" value={progress[index]} />
                 </div>
               )}
             </div>
@@ -134,12 +126,7 @@ const UploadPicture = () => {
           }}
           disabled={uploading}
         />
-        <Button
-          variant="contained"
-          disabled={uploading}
-          color="primary"
-          onClick={handleUpload}
-        >
+        <Button variant="contained" disabled={uploading} color="primary" onClick={handleUpload}>
           Upload
         </Button>
       </div>

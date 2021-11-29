@@ -1,8 +1,8 @@
 export type TUser = {
-  id: string,
-  firstName: string,
-  lastName: string,
-  familyId: string,
-  email: string,
+  id: string
+  firstName: string
+  lastName: string
+  familyId: string
+  email: string
   admin?: boolean
 }

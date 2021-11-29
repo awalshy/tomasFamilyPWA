@@ -1,6 +1,6 @@
 export type TConversation = {
-  id: string,
-  members: string[],
-  lastReadId: string,
+  id: string
+  members: string[]
+  lastReadId: string
   name: string
 }

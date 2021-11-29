@@ -1,17 +1,18 @@
 import firebase from 'firebase'
-
-import { TFamily } from "../types/Family"
-import { TConversation } from "../types/Conversation"
-import { TMessage } from "../types/Message"
-import { TUser } from "../types/User"
 import { Dispatch } from 'redux'
+
 import { addMessage } from 'src/redux/slices/Messages'
+
+import { TConversation } from 'src/types/Conversation'
+import { TFamily } from 'src/types/Family'
+import { TMessage } from 'src/types/Message'
+import { TUser } from 'src/types/User'
 
 export enum collecs {
   users = 'users',
   families = 'families',
   convs = 'conversations',
-  messages = 'messages'
+  messages = 'messages',
 }
 
 class API {
@@ -48,7 +49,7 @@ class FamiliesController {
       id: family.id,
       code: data.code,
       name: data.name,
-      members
+      members,
     } as TFamily
   }
 
@@ -64,21 +65,24 @@ class FamiliesController {
         firstName: data.firstName,
         email: '',
         familyId: familyId,
-        admin: data.admin
+        admin: data.admin,
       })
     }
     return familyMembers
   }
 
   async checkFamily(familyCode: string) {
-    const families = await firebase.firestore().collection(collecs.families).where('code', '==', familyCode).get()
-    if (families.docs.length <= 0)
-      return { exists: false }
+    const families = await firebase
+      .firestore()
+      .collection(collecs.families)
+      .where('code', '==', familyCode)
+      .get()
+    if (families.docs.length <= 0) return { exists: false }
     const family = families.docs[0]
     return {
       exists: true,
       code: family.get('code'),
-      name: family.get('name')
+      name: family.get('name'),
     }
   }
 
@@ -111,14 +115,18 @@ class GalleryController {
 class ConversationController {
   async getConvs(userId: string): Promise<TConversation[]> {
     const userRef = await firebase.firestore().collection(collecs.users).doc(userId)
-    const convsQuery = await firebase.firestore().collection(collecs.convs).where('members', 'array-contains', userRef).get()
-    const convs = convsQuery.docs.map(doc => {
+    const convsQuery = await firebase
+      .firestore()
+      .collection(collecs.convs)
+      .where('members', 'array-contains', userRef)
+      .get()
+    const convs = convsQuery.docs.map((doc) => {
       const data = doc.data()
       return {
         id: doc.id,
         members: data.members,
         name: data.name,
-        lastReadId: data.lastReadId
+        lastReadId: data.lastReadId,
       } as TConversation
     })
     return convs
@@ -128,13 +136,13 @@ class ConversationController {
     const conv = await firebase.firestore().collection(collecs.convs).add({
       members,
       name,
-      lastReadId: ''
+      lastReadId: '',
     })
     return {
       id: conv.id,
       members,
       name,
-      lastReadId: ''
+      lastReadId: '',
     } as TConversation
   }
 }
@@ -142,8 +150,12 @@ class ConversationController {
 class MessageController {
   async getMessagesInConv(convId: string): Promise<TMessage[]> {
     const convRef = firebase.firestore().collection(collecs.convs).doc(convId)
-    const messageQuery = await firebase.firestore().collection(collecs.messages).where('conversation', '==', convRef).get()
-    const messages = messageQuery.docs.map(doc => {
+    const messageQuery = await firebase
+      .firestore()
+      .collection(collecs.messages)
+      .where('conversation', '==', convRef)
+      .get()
+    const messages = messageQuery.docs.map((doc) => {
       const data = doc.data()
       if (data.conversation === undefined || data.sender === undefined)
         console.log('UNDEFINED', doc.id)
@@ -153,7 +165,7 @@ class MessageController {
         content: data.content,
         read: data.read,
         date: data.createdAt.toDate().getTime(),
-        senderId: data.sender.id
+        senderId: data.sender.id,
       } as TMessage
     })
     return messages
@@ -161,19 +173,24 @@ class MessageController {
 
   registerListenerToConv(convId: string, dispatch: Dispatch<any>) {
     const convRef = firebase.firestore().collection(collecs.convs).doc(convId)
-    const messagesQuery = firebase.firestore().collection(collecs.messages).where('conversation', '==', convRef)
-    const subscriber = messagesQuery.onSnapshot(snapshot => {
-      snapshot.docChanges().forEach(change => {
+    const messagesQuery = firebase
+      .firestore()
+      .collection(collecs.messages)
+      .where('conversation', '==', convRef)
+    const subscriber = messagesQuery.onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
           const data = change.doc.data()
-          dispatch(addMessage({
-            id: change.doc.id,
-            conversationId: data.conversation.id,
-            content: data.content,
-            read: data.read,
-            date: data.createdAt.toDate().getTime(),
-            senderId: data.sender.id
-          }))
+          dispatch(
+            addMessage({
+              id: change.doc.id,
+              conversationId: data.conversation.id,
+              content: data.content,
+              read: data.read,
+              date: data.createdAt.toDate().getTime(),
+              senderId: data.sender.id,
+            })
+          )
         }
       })
     })
@@ -183,13 +200,16 @@ class MessageController {
   async sendMessage(message: TMessage): Promise<TMessage> {
     const senderRef = firebase.firestore().collection(collecs.users).doc(message.senderId)
     const convRef = firebase.firestore().collection(collecs.convs).doc(message.conversationId)
-    const msg = await firebase.firestore().collection(collecs.messages).add({
-      content: message.content,
-      sender: senderRef,
-      read: message.read,
-      conversation: convRef,
-      createdAt: firebase.firestore.Timestamp.fromDate(new Date(message.date))
-    })
+    const msg = await firebase
+      .firestore()
+      .collection(collecs.messages)
+      .add({
+        content: message.content,
+        sender: senderRef,
+        read: message.read,
+        conversation: convRef,
+        createdAt: firebase.firestore.Timestamp.fromDate(new Date(message.date)),
+      })
     message.id = msg.id
     console.log('Sent Message ID', message.id)
     return message
@@ -198,18 +218,22 @@ class MessageController {
 
 class UsersController {
   async createUser(firstname: string, lastname: string, familyCode: string): Promise<TUser> {
-    const familySnap = await firebase.firestore().collection(collecs.families).where('code', '==', familyCode).get()
+    const familySnap = await firebase
+      .firestore()
+      .collection(collecs.families)
+      .where('code', '==', familyCode)
+      .get()
     const familyId = familySnap.docs[0].id
     const user = await firebase.firestore().collection(collecs.users).add({
       firstname,
       lastname,
-      familyId
+      familyId,
     })
     return {
       id: user.id,
       firstName: firstname,
       lastName: lastname,
-      familyId
+      familyId,
     } as TUser
   }
 
@@ -223,7 +247,7 @@ class UsersController {
       lastName: data.lastname,
       familyId: data.familyId,
       admin: data.admin,
-      email: ''
+      email: '',
     } as TUser
   }
 }

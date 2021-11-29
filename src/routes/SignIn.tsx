@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   Card,
   CardContent,
@@ -9,12 +7,15 @@ import {
   TextField,
   Theme,
   makeStyles,
-  createStyles
+  createStyles,
 } from '@material-ui/core'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import PageLayout from '../components/structure/PageLayout'
-import { selectAppLoading, selectUserLoggedIn, signInUser,  } from '../redux/slices/App'
-import { useAppSelector, useAppDispatch } from '../redux/hooks'
+import PageLayout from 'src/components/structure/PageLayout'
+
+import { useAppSelector, useAppDispatch } from 'src/redux/hooks'
+import { selectAppLoading, selectUserLoggedIn, signInUser } from 'src/redux/slices/App'
 
 const SignIn = (): JSX.Element => {
   const styles: any = useStyles()
@@ -32,50 +33,52 @@ const SignIn = (): JSX.Element => {
   }, [loggedIn, dispatch, navigate])
 
   const signin = () => {
-    dispatch(signInUser({
-      email, password
-    }))
+    dispatch(
+      signInUser({
+        email,
+        password,
+      })
+    )
   }
 
   return (
     <PageLayout title="Sign In">
       <div className={styles.center}>
-          <Card className={styles.card} raised>
-            <div className={styles.image}>
-              <img
-                src="/logo_head.svg"
-                alt="TOMAS Logo"
-                width="150vh"
-                height="150vh"
+        <Card className={styles.card} raised>
+          <div className={styles.image}>
+            <img src="/logo_head.svg" alt="TOMAS Logo" width="150vh" height="150vh" />
+          </div>
+          <CardContent>
+            <Typography className={styles.title}>Sign In</Typography>
+            <div className={styles.input}>
+              <TextField
+                className={styles.input}
+                id="email"
+                label="Email"
+                value={email}
+                variant="standard"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                className={styles.input}
+                id="password"
+                type="password"
+                label="Password"
+                value={password}
+                variant="standard"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-              <CardContent>
-                <Typography className={styles.title}>Sign In</Typography>
-                <div className={styles.input}>
-                  <TextField
-                    className={styles.input}
-                    id="email"
-                    label="Email"
-                    value={email}
-                    variant="standard"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <TextField
-                    className={styles.input}
-                    id="password"
-                    type="password"
-                    label="Password"
-                    value={password}
-                    variant="standard"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-              </CardContent>
-              <CardActions className={styles.actions}>
-                <Button variant="contained" color="primary" onClick={signin}>{appLoading ? 'Connexion...' : 'Se connecter'}</Button>
-                <Button onClick={() => navigate('/Register', { replace: true })}>Créer un compte</Button>
-              </CardActions>
-          </Card>
+          </CardContent>
+          <CardActions className={styles.actions}>
+            <Button variant="contained" color="primary" onClick={signin}>
+              {appLoading ? 'Connexion...' : 'Se connecter'}
+            </Button>
+            <Button onClick={() => navigate('/Register', { replace: true })}>
+              Créer un compte
+            </Button>
+          </CardActions>
+        </Card>
       </div>
     </PageLayout>
   )
@@ -87,7 +90,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '30vh',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     background: {
       height: '100%',
