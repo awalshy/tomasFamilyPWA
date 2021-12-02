@@ -161,7 +161,7 @@ const useStyle = makeStyles((theme: Theme) =>
       paddingLeft: '2vw',
       paddingRight: '2vw',
       width: '100vw',
-      backgroundColor: '#e6e6e6',
+      backgroundColor: '#',
     },
     appBar: {
       transition: theme.transitions.create(['width', 'margin'], {

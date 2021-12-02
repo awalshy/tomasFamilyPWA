@@ -93,7 +93,7 @@ function Profile() {
             item
             style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
-            <Avatar style={{ width: '10vh', height: '10vh', padding: '2vh' }}>
+            <Avatar style={{ width: '10vh', height: '10vh', padding: '2vh', backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.contrastText }}>
               {user?.firstName[0] || '' + user?.lastName[0] || ''}
             </Avatar>
           </Grid>
@@ -123,7 +123,7 @@ function Profile() {
               {user && user.admin && (
                 <Button
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={() =>
                     dispatch(
                       openModal({

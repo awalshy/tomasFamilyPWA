@@ -92,7 +92,10 @@ const Contact = () => {
           {familyMembers.map((member) => (
             <ListItem key={member.id}>
               <ListItemAvatar>
-                <Avatar>{member.firstName[0] + member.lastName[0]}</Avatar>
+                <Avatar style={{
+                  backgroundColor: theme.palette.secondary.dark,
+                  color: theme.palette.secondary.contrastText
+                }}>{member.firstName[0] + member.lastName[0]}</Avatar>
               </ListItemAvatar>
               <ListItemText>{member.firstName + ' ' + member.lastName}</ListItemText>
               <ListItemSecondaryAction>

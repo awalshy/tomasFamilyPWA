@@ -60,7 +60,7 @@ const Gallery = () => {
           </ImageList>
         )}
         <Fab
-          color="primary"
+          color="secondary"
           variant={isMobile ? 'circular' : 'extended'}
           style={{ position: 'absolute', bottom: '10vh', right: '5vw' }}
           onClick={() =>

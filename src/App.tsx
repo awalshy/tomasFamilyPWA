@@ -34,7 +34,17 @@ const themeOptions: ThemeOptions = {
   palette: {
     primary: {
       main: '#133c6d',
+      dark: '#001741',
+      light: '#48669c',
+      contrastText: '#e3eaeb'
     },
+    secondary: {
+      main: '#afd3ab',
+      light: '#e1ffdd',
+      dark: '#7fa27c',
+      contrastText: '#2d2d2d'
+    },
+
   },
 }
 
