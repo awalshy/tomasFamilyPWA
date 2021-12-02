@@ -218,6 +218,17 @@ class MessageController {
   }
 }
 
+function randString(length: number) {
+  var result = '';
+  var characters = '0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() *
+      charactersLength));
+  }
+  return result;
+}
+
 class UsersController {
   async createUser(firstname: string, lastname: string, familyCode: string): Promise<TUser> {
     const familySnap = await firebase
@@ -226,7 +237,9 @@ class UsersController {
       .where('code', '==', familyCode)
       .get()
     const familyId = familySnap.docs[0].id
+    const code = randString(10)
     const user = await firebase.firestore().collection(collecs.users).add({
+      code,
       firstname,
       lastname,
       familyId,
