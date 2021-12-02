@@ -50,7 +50,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write 'src/**/*.{ts,json,tsx}'",
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy",
+    "analyze": "yarn build --stats && npx webpack-bundle-analyzer ./build/bundle-stats.json"
   },
   "eslintConfig": {
     "extends": [

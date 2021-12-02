@@ -4,5 +4,6 @@ export type TUser = {
   lastName: string
   familyId: string
   email: string
+  code: string
   admin?: boolean
 }

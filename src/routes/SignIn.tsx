@@ -57,7 +57,7 @@ const SignIn = (): JSX.Element => {
                 label="Email"
                 value={email}
                 variant="standard"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.toLocaleLowerCase())}
               />
               <TextField
                 className={styles.input}

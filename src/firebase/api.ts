@@ -66,6 +66,7 @@ class FamiliesController {
         email: '',
         familyId: familyId,
         admin: data.admin,
+        code: data.code,
       })
     }
     return familyMembers
@@ -133,17 +134,18 @@ class ConversationController {
     return convs
   }
 
-  async createConv(members: string[], name: string): Promise<TConversation> {
-    const conv = await firebase.firestore().collection(collecs.convs).add({
+  async createConv(conv: TConversation): Promise<TConversation> {
+    const members = conv.members.map(mem => firebase.firestore().collection(collecs.users).doc(mem))
+    const newConv = await firebase.firestore().collection(collecs.convs).add({
       members,
-      name,
-      lastReadId: '',
+      name: conv.name,
+      lastReadId: conv.lastReadId,
     })
     return {
-      id: conv.id,
-      members,
-      name,
-      lastReadId: '',
+      id: newConv.id,
+      members: conv.members,
+      name: conv.name,
+      lastReadId: conv.lastReadId,
     } as TConversation
   }
 }
@@ -217,6 +219,17 @@ class MessageController {
   }
 }
 
+function randString(length: number) {
+  var result = '';
+  var characters = '0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() *
+      charactersLength));
+  }
+  return result;
+}
+
 class UsersController {
   async createUser(firstname: string, lastname: string, familyCode: string): Promise<TUser> {
     const familySnap = await firebase
@@ -225,7 +238,9 @@ class UsersController {
       .where('code', '==', familyCode)
       .get()
     const familyId = familySnap.docs[0].id
+    const code = randString(10)
     const user = await firebase.firestore().collection(collecs.users).add({
+      code,
       firstname,
       lastname,
       familyId,
@@ -235,19 +250,21 @@ class UsersController {
       firstName: firstname,
       lastName: lastname,
       familyId,
+      code,
     } as TUser
   }
 
   async getUserById(userId: string): Promise<TUser> {
     const user = await firebase.firestore().collection(collecs.users).doc(userId).get()
     const data = user.data()
-    if (!data) return { id: '', email: '', firstName: '', lastName: '', familyId: '' }
+    if (!data) return { id: '', email: '', firstName: '', lastName: '', familyId: '', code: '' }
     return {
       id: user.id,
       firstName: data.firstname,
       lastName: data.lastname,
       familyId: data.familyId,
       admin: data.admin,
+      code: data.code,
       email: '',
     } as TUser
   }

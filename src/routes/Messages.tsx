@@ -9,8 +9,9 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   IconButton,
+  Fab,
 } from '@material-ui/core'
-import { MoreHoriz } from '@material-ui/icons'
+import { Add, MoreHoriz } from '@material-ui/icons'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -18,7 +19,9 @@ import Header from 'src/components/structure/Header'
 
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
 import { selectAllConvs, selectUserId, selectUserLoggedIn } from 'src/redux/selectors'
+import { openModal } from 'src/redux/slices/App'
 import { loadConversation } from 'src/redux/slices/Conversations'
+import { MODALS } from 'src/types/App'
 
 const Messages = () => {
   const navigate = useNavigate()
@@ -64,6 +67,22 @@ const Messages = () => {
           ))}
         </List>
       </div>
+      <Fab
+          color="secondary"
+          variant={isMobile ? 'circular' : 'extended'}
+          style={{ position: 'absolute', bottom: '10vh', right: '5vw' }}
+          onClick={() =>
+            dispatch(
+              openModal({
+                name: MODALS.CREATE_CONVERSATION,
+                params: {},
+              })
+            )
+          }
+        >
+          <Add />
+          {!isMobile && 'New Conv'}
+        </Fab>
     </React.Fragment>
   )
 }

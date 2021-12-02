@@ -61,7 +61,7 @@ const darkTheme: ThemeOptions = {
 }
 
 function App() {
-  const [dark, setDark] = useState(store.getState().app.darkTheme)
+  const [dark, setDark] = useState(store.getState().app.darkTheme || JSON.parse(localStorage.getItem('__useDarkTheme') || 'false'))
 
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
