@@ -133,17 +133,18 @@ class ConversationController {
     return convs
   }
 
-  async createConv(members: string[], name: string): Promise<TConversation> {
-    const conv = await firebase.firestore().collection(collecs.convs).add({
+  async createConv(conv: TConversation): Promise<TConversation> {
+    const members = conv.members.map(mem => firebase.firestore().collection(collecs.users).doc(mem))
+    const newConv = await firebase.firestore().collection(collecs.convs).add({
       members,
-      name,
-      lastReadId: '',
+      name: conv.name,
+      lastReadId: conv.lastReadId,
     })
     return {
-      id: conv.id,
-      members,
-      name,
-      lastReadId: '',
+      id: newConv.id,
+      members: conv.members,
+      name: conv.name,
+      lastReadId: conv.lastReadId,
     } as TConversation
   }
 }

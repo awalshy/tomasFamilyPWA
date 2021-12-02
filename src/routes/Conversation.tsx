@@ -108,6 +108,7 @@ function Conversation() {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
+            marginBottom: '1vh'
           }}
         >
           <TextField

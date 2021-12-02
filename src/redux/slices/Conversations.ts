@@ -5,6 +5,7 @@ import { RootState } from 'src/redux/store'
 import API from 'src/firebase/api'
 
 import { TConversation } from 'src/types/Conversation'
+import { toast } from 'react-toastify'
 
 // Adapter
 const convsAdapter = createEntityAdapter<TConversation>({
@@ -21,7 +22,7 @@ export const loadConversation = createAsyncThunk('convs/load', async (userId: st
 
 export const createConversation = createAsyncThunk('convs/create', async (conv: TConversation) => {
   const api = new API()
-  const newConv = await api.convs.createConv(conv.members, conv.name)
+  const newConv = await api.convs.createConv(conv)
   return newConv
 })
 
@@ -37,6 +38,7 @@ const convsSlice = createSlice({
     })
     builder.addCase(createConversation.fulfilled, (state, action) => {
       convsAdapter.addOne(state, action.payload)
+      toast.success('La conversation a bien été crée')
     })
   },
 })

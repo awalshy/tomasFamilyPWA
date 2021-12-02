@@ -1,7 +1,7 @@
 import { Modal, Paper, Theme, makeStyles, createStyles } from '@material-ui/core'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { selectUserId, selectModal } from 'src/redux/selectors'
+import { selectUserId, selectModal, selectAppTheme } from 'src/redux/selectors'
 import { closeModal } from 'src/redux/slices/App'
 
 // Modals
@@ -10,11 +10,14 @@ import PeakMember from 'src/modal/PeakMember'
 import UploadPictureModal from 'src/modal/UploadPictureModal'
 
 import { MODALS } from 'src/types/App'
+import CreateConversation from 'src/modal/CreateConversation'
+import { useAppSelector } from 'src/redux/hooks'
 
 const getModal = (modal: MODALS, _ownerId: string, params: any): JSX.Element => {
   if (modal === MODALS.UPLOAD_PICTURE) return <UploadPictureModal />
   if (modal === MODALS.EDIT_FAMILY) return <EditFamily />
   if (modal === MODALS.PEAK_MEMBER) return <PeakMember id={params.id} />
+  if (modal === MODALS.CREATE_CONVERSATION) return <CreateConversation />
   return <div></div>
 }
 
@@ -22,14 +25,15 @@ const ModalController = () => {
   const dispatch = useDispatch()
   const classes: any = useStyles()
 
-  const modal = useSelector(selectModal)
-  const ownerId = useSelector(selectUserId)
+  const modal = useAppSelector(selectModal)
+  const ownerId = useAppSelector(selectUserId)
+  const dark = useAppSelector(selectAppTheme)
 
   if (!modal) return <></>
 
   return (
     <Modal open={modal != null} onClose={() => dispatch(closeModal())} className={classes.modal}>
-      <Paper className={classes.paper}>{getModal(modal.name, ownerId || '', modal.params)}</Paper>
+      <Paper style={{ backgroundColor: dark ? '#2d2d2d' : undefined }} className={classes.paper}>{getModal(modal.name, ownerId || '', modal.params)}</Paper>
     </Modal>
   )
 }
