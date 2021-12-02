@@ -66,6 +66,11 @@ function App() {
         )
       }
     })
+    if ('Notification' in window && Notification.permission !== 'granted')
+      Notification.requestPermission().then(permission => {
+        if (permission === 'denied')
+          toast.error('Les notifications sont bloquées')
+      })
   }, [])
 
   return (

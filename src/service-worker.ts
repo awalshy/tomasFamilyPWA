@@ -14,19 +14,12 @@ import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
 import firebase from 'firebase'
 import firebaseConfig from './config/firebase-config.json'
+import { registerNotifToken } from './firebase/messaging'
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig)
-  console.warn('[SW] Registering firebase and firebase messaging')
-  firebase
-    .messaging()
-    .getToken({
-      vapidKey:
-        'BAqnVgBE6zpqitj8JAZugVwQvwI5wvA4TCXZliUHBu0vhDvJ1ym70S83pv8Hs82cXvuYVymFg-VaMQM7h0OBxpI',
-    }).catch(err => {
-      console.error(err)
-    })
-  
+  registerNotifToken()
+
   firebase.messaging().onBackgroundMessage(payload => {
     console.log('Background Message', payload)
     if (!payload.notification?.title) return
@@ -102,4 +95,19 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting()
   }
+})
+
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open('cache').then(cache => {
+      return cache.addAll([
+        '/icon.png',
+        '/favicon.ico',
+        '/LogoColorLight.svg',
+        '/profile.svg',
+        '/convs.svg',
+        '/calls.svg'
+      ])
+    })
+  )
 })

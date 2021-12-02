@@ -49,7 +49,7 @@ const Contact = () => {
   const loggedIn = useAppSelector(selectUserLoggedIn)
   const userId = useAppSelector(selectUserId)
   const userFamilyId = useAppSelector(selectUserFamilyId)
-  const familyMembers = useAppSelector(selectAllMembers).filter((m) => m.id !== userId)
+  const familyMembers = useAppSelector(selectAllMembers).filter((m) => m.id !== userId) 
 
   useEffect(() => {
     if (!loggedIn) navigate('/SignIn', { replace: true })
