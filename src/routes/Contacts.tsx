@@ -49,7 +49,9 @@ const Contact = () => {
   const loggedIn = useAppSelector(selectUserLoggedIn)
   const userId = useAppSelector(selectUserId)
   const userFamilyId = useAppSelector(selectUserFamilyId)
-  const familyMembers = useAppSelector(selectAllMembers).filter((m) => m.id !== userId) 
+  const familyMembers = useAppSelector(selectAllMembers).filter(
+    (m) => m.id !== userId && m.firstName !== undefined && m.lastName !== undefined
+  )
 
   useEffect(() => {
     if (!loggedIn) navigate('/SignIn', { replace: true })
@@ -92,10 +94,14 @@ const Contact = () => {
           {familyMembers.map((member) => (
             <ListItem key={member.id}>
               <ListItemAvatar>
-                <Avatar style={{
-                  backgroundColor: theme.palette.secondary.dark,
-                  color: theme.palette.secondary.contrastText
-                }}>{member.firstName[0] + member.lastName[0]}</Avatar>
+                <Avatar
+                  style={{
+                    backgroundColor: theme.palette.secondary.dark,
+                    color: theme.palette.secondary.contrastText,
+                  }}
+                >
+                  {member.firstName[0] + member.lastName[0]}
+                </Avatar>
               </ListItemAvatar>
               <ListItemText>{member.firstName + ' ' + member.lastName}</ListItemText>
               <ListItemSecondaryAction>

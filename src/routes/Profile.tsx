@@ -3,6 +3,7 @@ import {
   Button,
   Divider,
   Grid,
+  Switch,
   Typography,
   useMediaQuery,
   useTheme,
@@ -22,8 +23,9 @@ import {
   selectFamilyName,
   selectUser,
   selectUserLoggedIn,
+  selectAppTheme,
 } from 'src/redux/selectors'
-import { openModal, signOutUser } from 'src/redux/slices/App'
+import { openModal, signOutUser, toggleTheme } from 'src/redux/slices/App'
 import { loadFamily } from 'src/redux/slices/Family'
 
 import { MODALS } from 'src/types/App'
@@ -46,6 +48,7 @@ function Profile() {
   const user = useAppSelector(selectUser)
   const loggedIn = useAppSelector(selectUserLoggedIn)
   const loading = useAppSelector(selectAppLoading)
+  const dark = useAppSelector(selectAppTheme)
 
   useEffect(() => {
     if (!loggedIn || !user) navigate('/SignIn')
@@ -144,9 +147,18 @@ function Profile() {
                 <Button onClick={handleShowCode}>Code Famille</Button>
               )}
             </div>
-            <Divider style={{ marginTop: '2vh', marginBottom: '5vh' }} />
+            <Divider style={{ marginTop: '2vh', marginBottom: '4vh' }} />
           </React.Fragment>
         )}
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+          <Typography>Thème sombre</Typography>
+          <Switch
+            color="secondary"
+            checked={dark}
+            onChange={() => dispatch(toggleTheme())}
+          />
+        </div>
+        <Divider style={{ marginTop: '2vh', marginBottom: '4vh' }} />
         {'Notification' in window &&
           <div style={{
             display: 'flex',

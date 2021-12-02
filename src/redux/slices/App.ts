@@ -17,6 +17,7 @@ const initialState: IAppState = {
   modal: null,
   loading: false,
   error: '',
+  darkTheme: JSON.parse(localStorage.getItem('__useDarkTheme') || 'false'),
 }
 
 export const signInUser = createAsyncThunk(
@@ -158,6 +159,10 @@ const appSlice = createSlice({
     closeModal(state) {
       state.modal = null
     },
+    toggleTheme(state) {
+      localStorage.setItem('__useDarkTheme', JSON.stringify(!state.darkTheme))
+      state.darkTheme = !state.darkTheme
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(signUpUser.pending, (state, _action) => {
@@ -233,7 +238,7 @@ const appSlice = createSlice({
   },
 })
 
-export const { appReady, updateUser, closeModal, openModal } = appSlice.actions
+export const { appReady, updateUser, closeModal, openModal, toggleTheme } = appSlice.actions
 
 export const selectUserId = (state: RootState) => state.app.user?.id
 export const selectUser = (state: RootState) => state.app.user
@@ -241,5 +246,6 @@ export const selectUserFamilyId = (state: RootState) => state.app.user?.familyId
 export const selectUserLoggedIn = (state: RootState) => state.app.loggedIn
 export const selectModal = (state: RootState) => state.app.modal
 export const selectAppLoading = (state: RootState) => state.app.loading
+export const selectAppTheme = (state: RootState) => state.app.darkTheme
 
 export default appSlice.reducer

@@ -1,20 +1,14 @@
 import { createTheme, ThemeOptions, ThemeProvider } from '@material-ui/core';
 import firebase from 'firebase';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 
-
-
 import ModalController from './components/app/ModalController';
-
-
 
 import { loadUser } from './redux/slices/App';
 import store from './redux/store';
-
-
 
 import Error404 from './routes/404';
 import Call from './routes/Call';
@@ -24,13 +18,11 @@ import Profile from './routes/Profile';
 import Register from './routes/Register';
 import SignIn from './routes/SignIn';
 
-
-
 import './App.css';
 import firebaseConfig from './config/firebase-config.json';
 
 
-const themeOptions: ThemeOptions = {
+const lightTheme: ThemeOptions = {
   palette: {
     primary: {
       main: '#133c6d',
@@ -48,7 +40,29 @@ const themeOptions: ThemeOptions = {
   },
 }
 
+const darkTheme: ThemeOptions = {
+  palette: {
+    primary: {
+      main: '#001524',
+      dark: '#000000',
+      light: '#293b4d',
+      contrastText: '#e3eaeb',
+    },
+    secondary: {
+      main: '#004a9e',
+      light: '#5075d0',
+      dark: '#00246f',
+      contrastText: '#e3eaeb',
+    },
+    text: {
+      primary: '#e2eaeb',
+    },
+  },
+}
+
 function App() {
+  const [dark, setDark] = useState(store.getState().app.darkTheme)
+
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
     console.warn('Enabling persistence')
@@ -83,9 +97,13 @@ function App() {
       })
   }, [])
 
+  store.subscribe(() => {
+    setDark(store.getState().app.darkTheme)
+  })
+
   return (
     <Provider store={store}>
-      <ThemeProvider theme={createTheme(themeOptions)}>
+      <ThemeProvider theme={createTheme(dark ? darkTheme : lightTheme)}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
