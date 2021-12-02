@@ -66,6 +66,7 @@ class FamiliesController {
         email: '',
         familyId: familyId,
         admin: data.admin,
+        code: data.code,
       })
     }
     return familyMembers
@@ -249,19 +250,21 @@ class UsersController {
       firstName: firstname,
       lastName: lastname,
       familyId,
+      code,
     } as TUser
   }
 
   async getUserById(userId: string): Promise<TUser> {
     const user = await firebase.firestore().collection(collecs.users).doc(userId).get()
     const data = user.data()
-    if (!data) return { id: '', email: '', firstName: '', lastName: '', familyId: '' }
+    if (!data) return { id: '', email: '', firstName: '', lastName: '', familyId: '', code: '' }
     return {
       id: user.id,
       firstName: data.firstname,
       lastName: data.lastname,
       familyId: data.familyId,
       admin: data.admin,
+      code: data.code,
       email: '',
     } as TUser
   }

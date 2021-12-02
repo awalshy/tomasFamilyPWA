@@ -40,6 +40,7 @@ export const signInUser = createAsyncThunk(
       firstName: data.firstName,
       lastName: data.lastName,
       familyId: familyRef.id,
+      code: data.code,
     } as TUser
     return u
   }
@@ -133,6 +134,7 @@ export const loadUser = createAsyncThunk(
       firstName: data.firstName,
       lastName: data.lastName,
       admin: data.admin,
+      code: data.code,
       familyId: familyRef.id,
     } as TUser
   }

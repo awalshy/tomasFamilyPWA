@@ -105,6 +105,7 @@ function Profile() {
               user?.lastName || ''
             }`}</Typography>
             <Typography variant="body2">{user?.email}</Typography>
+            <Typography variant="body2">{`Mon code ${user?.code}`}</Typography>
           </Grid>
         </Grid>
         {familyName && (
