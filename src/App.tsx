@@ -1,25 +1,34 @@
-import { createTheme, ThemeOptions, ThemeProvider } from '@material-ui/core'
-import firebase from 'firebase'
-import { useEffect } from 'react'
-import { Provider } from 'react-redux'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
+import { createTheme, ThemeOptions, ThemeProvider } from '@material-ui/core';
+import firebase from 'firebase';
+import { useEffect } from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
-import ModalController from './components/app/ModalController'
 
-import { loadUser } from './redux/slices/App'
-import store from './redux/store'
 
-import Error404 from './routes/404'
-import Call from './routes/Call'
-import Conversation from './routes/Conversation'
-import Home from './routes/Home'
-import Profile from './routes/Profile'
-import Register from './routes/Register'
-import SignIn from './routes/SignIn'
+import ModalController from './components/app/ModalController';
 
-import './App.css'
-import firebaseConfig from './config/firebase-config.json'
+
+
+import { loadUser } from './redux/slices/App';
+import store from './redux/store';
+
+
+
+import Error404 from './routes/404';
+import Call from './routes/Call';
+import Conversation from './routes/Conversation';
+import Home from './routes/Home';
+import Profile from './routes/Profile';
+import Register from './routes/Register';
+import SignIn from './routes/SignIn';
+
+
+
+import './App.css';
+import firebaseConfig from './config/firebase-config.json';
+
 
 const themeOptions: ThemeOptions = {
   palette: {
@@ -41,6 +50,9 @@ function App() {
       .firestore()
       .enablePersistence()
       .catch((err) => console.error('Firestore Persistence error', err))
+    firebase.messaging().onMessage((payload) => {
+      toast(`Nouveau message: ${payload.notification.title}`)
+    })
   }
 
   useEffect(() => {
@@ -54,6 +66,11 @@ function App() {
         )
       }
     })
+    if ('Notification' in window && Notification.permission !== 'granted')
+      Notification.requestPermission().then(permission => {
+        if (permission === 'denied')
+          toast.error('Les notifications sont bloquées')
+      })
   }, [])
 
   return (

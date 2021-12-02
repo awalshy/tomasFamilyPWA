@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { UAParser } from 'ua-parser-js'
 
 import Header from 'src/components/structure/Header'
 import PageLayout from 'src/components/structure/PageLayout'
@@ -32,7 +33,11 @@ function Profile() {
   const dispatch = useAppDispatch()
   const theme = useTheme()
 
+  const parser = new UAParser(navigator.userAgent)
+
   const [showCode, setShowCode] = useState(false)
+  const storageActive = localStorage.getItem('__activeNotif')
+  const [active, setActive] = useState<boolean>(storageActive === 'true')
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const familyCode = useAppSelector(selectFamilyCode)
@@ -53,6 +58,29 @@ function Profile() {
   const handleShowCode = () => {
     setShowCode(true)
     setTimeout(() => setShowCode(false), 20000)
+  }
+  const handleRegister = async () => {
+    if (!active) {
+      if ('Notification' in window && Notification.permission === 'granted')
+        new Notification('Les notifications sont activées !', {
+          body: 'Les notifications sont désormais activées sur votre appareil. Quand vous utilisez l\'application elles appaitront sur le bas de votre écran. Quand l\'application est fermée, vous recevrez des notifications ici.'
+        })
+      localStorage.setItem('__activeNotif', 'true')
+    } else {
+      localStorage.setItem('__activeNotif', 'false')
+    }
+    setActive(!active)
+  }
+  const getDeviceName = () => {
+    const device = parser.getDevice()
+    const os = parser.getOS()
+    const browser = parser.getBrowser()
+
+    if (device.type === 'mobile') {
+      return `Téléphone ${device.vendor + ' ' || ''}${os.name} ${os.version}`
+    } else {
+      return `Ordinateur ${device.vendor} - ${browser.name}`
+    }
   }
 
   return (
@@ -119,6 +147,26 @@ function Profile() {
             <Divider style={{ marginTop: '2vh', marginBottom: '5vh' }} />
           </React.Fragment>
         )}
+        {'Notification' in window &&
+          <div style={{
+            display: 'flex',
+            borderColor: 'grey',
+            borderWidth: active ? undefined : 2,
+            borderStyle: active ? 'none' : 'dashed',
+            borderRadius: 12,
+            padding: '1vh 5vw',
+            alignItems: 'center',
+            backgroundColor: active ? 'white' : undefined,
+            boxShadow: active ? '3px 3px 2px grey' : undefined
+          }}>
+            <Typography style={{ flexGrow: 1 }}>
+              {getDeviceName()}
+            </Typography>
+            <Button onClick={handleRegister} variant="outlined">
+              {active ? 'Désactiver' : 'Activer'}
+            </Button>
+          </div>
+        }
         {isMobile && (
           <div
             style={{

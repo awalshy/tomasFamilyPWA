@@ -120,11 +120,12 @@ class ConversationController {
       .collection(collecs.convs)
       .where('members', 'array-contains', userRef)
       .get()
-    const convs = convsQuery.docs.map((doc) => {
+      const convs = convsQuery.docs.map((doc) => {
       const data = doc.data()
+      const members = data.members.map((m: firebase.firestore.DocumentReference) => m.id)
       return {
         id: doc.id,
-        members: data.members,
+        members,
         name: data.name,
         lastReadId: data.lastReadId,
       } as TConversation
