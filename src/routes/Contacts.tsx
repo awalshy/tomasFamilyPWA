@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
 
 import ListSkeleton from 'src/components/structure/ListSkeleton'
 
-import { openModal } from 'src/redux/slices/App'
+import { openModal, selectAppTheme } from 'src/redux/slices/App'
 
 import { MODALS } from 'src/types/App'
 import { TUser } from 'src/types/User'
@@ -49,6 +49,7 @@ const Contact = () => {
   const loggedIn = useAppSelector(selectUserLoggedIn)
   const userId = useAppSelector(selectUserId)
   const userFamilyId = useAppSelector(selectUserFamilyId)
+  const dark = useAppSelector(selectAppTheme)
   const familyMembers = useAppSelector(selectAllMembers).filter(
     (m) => m.id !== userId && m.firstName !== undefined && m.lastName !== undefined
   )
@@ -106,10 +107,10 @@ const Contact = () => {
               <ListItemText>{member.firstName + ' ' + member.lastName}</ListItemText>
               <ListItemSecondaryAction>
                 <IconButton onClick={() => navigate('/Call')}>
-                  <PhoneEnabled />
+                  <PhoneEnabled style={dark ? { color: theme.palette.text.primary } : undefined} />
                 </IconButton>
                 <IconButton onClick={(e) => handleMenu(e, member)}>
-                  <MoreHoriz />
+                  <MoreHoriz style={dark ? { color: theme.palette.text.primary } : undefined} />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>

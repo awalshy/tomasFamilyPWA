@@ -168,7 +168,7 @@ function Profile() {
             borderRadius: 12,
             padding: '1vh 5vw',
             alignItems: 'center',
-            backgroundColor: active ? 'white' : undefined,
+            backgroundColor: active ? dark ? '#2b2b2b' : 'white' : undefined,
             boxShadow: active ? '3px 3px 2px grey' : undefined
           }}>
             <Typography style={{ flexGrow: 1 }}>
