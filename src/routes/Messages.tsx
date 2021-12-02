@@ -49,7 +49,10 @@ const Messages = () => {
           {convs.map((conv) => (
             <ListItem key={conv.id} button onClick={() => handleConvSelect(conv.id)}>
               <ListItemAvatar>
-                <Avatar>{conv.name.slice(0, 2)}</Avatar>
+                <Avatar style={{
+                  backgroundColor: theme.palette.secondary.main,
+                  color: theme.palette.secondary.contrastText
+                }}>{conv.name.slice(0, 2)}</Avatar>
               </ListItemAvatar>
               <ListItemText primary={conv.name} secondary={'Last Message'} />
               <ListItemSecondaryAction>

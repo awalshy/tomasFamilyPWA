@@ -23,4 +23,5 @@ export interface IAppState {
   loggedIn: boolean
   loading: boolean
   error: string
+  darkTheme: boolean
 }

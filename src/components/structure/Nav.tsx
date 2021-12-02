@@ -19,7 +19,7 @@ import React, { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from 'src/redux/hooks'
-import { selectUser, selectUserLoggedIn } from 'src/redux/selectors'
+import { selectUser, selectUserLoggedIn, selectAppTheme } from 'src/redux/selectors'
 import { signOutUser } from 'src/redux/slices/App'
 
 const Nav = ({
@@ -39,6 +39,7 @@ const Nav = ({
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const user = useAppSelector(selectUser)
   const loggedIn = useAppSelector(selectUserLoggedIn)
+  const dark = useAppSelector(selectAppTheme)
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -126,8 +127,8 @@ const Nav = ({
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={() => navigate('/Profile')}>Profile</MenuItem>
-                <MenuItem onClick={logout}>Logout</MenuItem>
+                <MenuItem style={{ color: dark ? '#2d2d2d' : undefined }} onClick={() => navigate('/Profile')}>Profile</MenuItem>
+                <MenuItem style={{ color: dark ? '#2d2d2d' : undefined }} onClick={logout}>Logout</MenuItem>
               </Menu>
             </div>
           )}
@@ -144,7 +145,7 @@ const Nav = ({
           )}
         </Toolbar>
       </AppBar>
-      <div className={classes.rootChildren}>{children}</div>
+      <div style={{ backgroundColor: dark ? '#2d2d2d' : '#e3eaeb' }} className={classes.rootChildren}>{children}</div>
     </div>
   )
 }
@@ -161,7 +162,6 @@ const useStyle = makeStyles((theme: Theme) =>
       paddingLeft: '2vw',
       paddingRight: '2vw',
       width: '100vw',
-      backgroundColor: '#e6e6e6',
     },
     appBar: {
       transition: theme.transitions.create(['width', 'margin'], {

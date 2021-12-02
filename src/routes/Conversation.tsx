@@ -117,7 +117,7 @@ function Conversation() {
             onChange={(e) => setMessage(e.target.value)}
           />
           <IconButton onClick={handleSend}>
-            <Send />
+            <Send color="secondary" />
           </IconButton>
         </div>
       </div>

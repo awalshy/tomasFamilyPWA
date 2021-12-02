@@ -14,4 +14,5 @@ export {
   selectUserFamilyId,
   selectUserLoggedIn,
   selectAppLoading,
+  selectAppTheme,
 } from './slices/App'

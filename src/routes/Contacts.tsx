@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
 
 import ListSkeleton from 'src/components/structure/ListSkeleton'
 
-import { openModal } from 'src/redux/slices/App'
+import { openModal, selectAppTheme } from 'src/redux/slices/App'
 
 import { MODALS } from 'src/types/App'
 import { TUser } from 'src/types/User'
@@ -49,7 +49,10 @@ const Contact = () => {
   const loggedIn = useAppSelector(selectUserLoggedIn)
   const userId = useAppSelector(selectUserId)
   const userFamilyId = useAppSelector(selectUserFamilyId)
-  const familyMembers = useAppSelector(selectAllMembers).filter((m) => m.id !== userId) 
+  const dark = useAppSelector(selectAppTheme)
+  const familyMembers = useAppSelector(selectAllMembers).filter(
+    (m) => m.id !== userId && m.firstName !== undefined && m.lastName !== undefined
+  )
 
   useEffect(() => {
     if (!loggedIn) navigate('/SignIn', { replace: true })
@@ -92,15 +95,22 @@ const Contact = () => {
           {familyMembers.map((member) => (
             <ListItem key={member.id}>
               <ListItemAvatar>
-                <Avatar>{member.firstName[0] + member.lastName[0]}</Avatar>
+                <Avatar
+                  style={{
+                    backgroundColor: theme.palette.secondary.dark,
+                    color: theme.palette.secondary.contrastText,
+                  }}
+                >
+                  {member.firstName[0] + member.lastName[0]}
+                </Avatar>
               </ListItemAvatar>
               <ListItemText>{member.firstName + ' ' + member.lastName}</ListItemText>
               <ListItemSecondaryAction>
                 <IconButton onClick={() => navigate('/Call')}>
-                  <PhoneEnabled />
+                  <PhoneEnabled style={dark ? { color: theme.palette.text.primary } : undefined} />
                 </IconButton>
                 <IconButton onClick={(e) => handleMenu(e, member)}>
-                  <MoreHoriz />
+                  <MoreHoriz style={dark ? { color: theme.palette.text.primary } : undefined} />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
